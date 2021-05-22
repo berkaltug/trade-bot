@@ -11,6 +11,7 @@ const {
 const _ = require("lodash");
 const { intervalToMs } = require("./rsiEmaEngulf");
 const talib = require("talib");
+const Big=require("big.js");
 exports.stochMacdRsi = async ({
   pair,
   interval,
@@ -19,14 +20,15 @@ exports.stochMacdRsi = async ({
   endDate = new Date(),
 }) => {
   let finalFund = startFund;
-  let takeProfit = mathjs.bignumber(0);
-  let stopLoss = mathjs.bignumber(0);
+  let takeProfit = 0;
+  let stopLoss = 0;
   let openPositions = 0;
   let totalOrder = 0;
   let successOrder = 0;
   let failedOrder = 0;
-  let coinAmount = mathjs.bignumber(0);
+  let coinAmount = 0;
   let positionType;
+  let shortHelper=new Big(0);
   const startMs = startDate?.getTime();
   const endMs = endDate?.getTime();
   const dividerMs = intervalToMs(interval);
@@ -60,10 +62,10 @@ exports.stochMacdRsi = async ({
   }
   _.forEach(ticksArray, (ticks, index) => {
     _.forEach(ticks, (value, index) => {
-      open.push(mathjs.bignumber(value[1]));
-      high.push(mathjs.bignumber(value[2]));
-      low.push(mathjs.bignumber(value[3]));
-      close.push(mathjs.bignumber(value[4]));
+      open.push(new Big(value[1]));
+      high.push(new Big(value[2]));
+      low.push(new Big(value[3]));
+      close.push(new Big(value[4]));
     });
   });
   const rsi = RSI.calculate({ values: close, period: 14 });
@@ -84,13 +86,13 @@ exports.stochMacdRsi = async ({
     signalPeriod: 3,
   });
 
-  const stochK = _.map(stoch, (value, index) => index>1 && mathjs.bignumber(value.k));
-  const stochD = _.map(stoch, (value, index) => index>1 && mathjs.bignumber(value.d));
+  const stochK = _.map(stoch, (value, index) => index>1 && new Big(value.k));
+  const stochD = _.map(stoch, (value, index) => index>1 && new Big(value.d));
   const stochCrossUps = CrossUp.calculate({ lineA: stochK, lineB: stochD });
   const stochCrossDowns = CrossDown.calculate({ lineA: stochK, lineB: stochD });
-  const macdArr = _.map(macd.result.outMACD, (value, index) => mathjs.bignumber(value));
+  const macdArr = _.map(macd.result.outMACD, (value, index) => new Big(value));
   const macdSignal = _.map(macd.result.outMACDSignal, (value, index) =>
-    mathjs.bignumber(value)
+    new Big(value)
   );
   const macdCrossUps = CrossUp.calculate({ lineA: macdArr, lineB: macdSignal });
   const macdCrossDowns = CrossDown.calculate({
@@ -117,25 +119,16 @@ exports.stochMacdRsi = async ({
           for (let j = stochCrossOversoldIdx; j <= i; j++) {
             if (macdCrossUps[j]) {
               //buy long position sondan 5 mumun en düşüğü stoploss , 1.5 katı tp
-              finalFund = mathjs.subtract(
-                finalFund,
-                mathjs.divide(finalFund, mathjs.bignumber(1000))
-              );
-              coinAmount = mathjs.divide(finalFund, open[i]);
-              finalFund = mathjs.mod(finalFund, open[i]);
+              finalFund =finalFund.minus(finalFund.div(1000))
+              coinAmount =finalFund.div(open[i]);
+              finalFund = 0;
               //son 5 mumun en düşüğü bulunuyor
               const lowestArr = [];
               for (let k = 1; k < 6; k++) {
                 lowestArr.push(low[i - k]);
               }
-              stopLoss = mathjs.min(lowestArr);
-              takeProfit = mathjs.sum(
-                open[i],
-                mathjs.multiply(
-                  mathjs.subtract(open[i], stopLoss),
-                  mathjs.bignumber(1.5)
-                )
-              );
+              stopLoss = Math.min(lowestArr);
+              takeProfit = open[i].plus(open[i].minus(stopLoss).times(1.5))
               totalOrder++;
               positionType = "long";
               openPositions = 1;
@@ -156,25 +149,17 @@ exports.stochMacdRsi = async ({
           for (let j = stochCrossOverboughtIdx; j <= i; j++) {
             if (macdCrossDowns[j]) {
               //buy short position son 5 mumun en düşüğü stopLoss , 1.5 katı tp
-              finalFund = mathjs.subtract(
-                finalFund,
-                mathjs.divide(finalFund, mathjs.bignumber(1000))
-              );
-              coinAmount = mathjs.divide(finalFund, open[i]);
-              finalFund = mathjs.mod(finalFund, open[i]);
+              finalFund = finalFund.minus(finalFund.div(1000)); 
+              shortHelper=finalFund;
+              coinAmount =finalFund.div(open[i]); 
+              finalFund = 0
               //son 5 mumun en düşüğü bulunuyor
               const highestArr = [];
               for (let k = 1; k < 6; k++) {
                 highestArr.push(high[i - k]);
               }
-              stopLoss = mathjs.max(highestArr);
-              takeProfit = mathjs.subtract(
-                open[i],
-                mathjs.multiply(
-                  mathjs.subtract(stopLoss, open[i]),
-                  mathjs.bignumber(1.5)
-                )
-              );
+              stopLoss = Math.max(highestArr);
+              takeProfit = open[i].minus(stopLoss.minus(open[i]).times(1.5));
               totalOrder++;
               positionType = "short";
               openPositions = 1;
@@ -187,71 +172,49 @@ exports.stochMacdRsi = async ({
     }
     if (openPositions == 1) {
       if (positionType === "long") {
-        if (high[i] > takeProfit) {
-          let amount = mathjs.multiply(coinAmount, stopLoss);
-          let withFee = mathjs.subtract(
-            amount,
-            mathjs.divide(amount, mathjs.bignumber(1000))
-          );
-          finalFund = mathjs.sum(finalFund, withFee);
-          coinAmount = mathjs.bignumber(0);
+        if (high[i] >= takeProfit) {
+          let amount = takeProfit.times(coinAmount);
+          let withFee =amount.minus(amount.div(1000)); 
+          finalFund = finalFund.plus(withFee);
+          coinAmount = 0;
           successOrder++;
           openPositions = 0;
-        } else if (low[i] < stopLoss) {
-          let amount = mathjs.multiply(coinAmount, stopLoss);
-          let withFee = mathjs.subtract(
-            amount,
-            mathjs.divide(amount, mathjs.bignumber(1000))
-          );
-          finalFund = mathjs.sum(finalFund, withFee);
-          coinAmount = mathjs.bignumber(0);
+        } else if (low[i] <= stopLoss) {
+          let amount = stopLoss.times(coinAmount); 
+          let withFee = amount.minus(amount.div(1000)); 
+          finalFund = finalFund.plus(withFee);
+          coinAmount = 0;
           failedOrder++;
           openPositions = 0;
         }
       }
       if (positionType === "short") {
-        if (low[i] < takeProfit) {
-          console.log("++++");
-          let amount = mathjs.multiply(coinAmount, takeProfit);
-          let withFee = mathjs.subtract(
-            amount,
-            mathjs.divide(amount, mathjs.bignumber(1000))
-          );
-          finalFund=mathjs.sum(finalFund,mathjs.subtract(finalFund,withFee));
-          coinAmount = mathjs.bignumber(0);
+        if (low[i] <= takeProfit) {
+          let amount = takeProfit.times(coinAmount);
+          //komisyon kesimi
+          let withFee = amount.plus(amount.div(1000));
+          finalFund = shortHelper.plus(shortHelper.minus(withFee));
+          coinAmount = 0;
           successOrder++;
           openPositions = 0;
-        } else if (high[i] > stopLoss) {
-          console.log("----");
-          let amount = mathjs.multiply(coinAmount, stopLoss);
-          let withFee = mathjs.subtract(
-            amount,
-            mathjs.divide(amount, mathjs.bignumber(1000))
-          );
-          finalFund=mathjs.sum(finalFund,mathjs.subtract(finalFund,withFee));
-          coinAmount = mathjs.bignumber(0);
+        } else if (high[i] >= stopLoss) {
+          let amount = stopLoss.times(coinAmount); mathjs.multiply(coinAmount, stopLoss);
+          let withFee = amount.plus(amount.div(1000));
+          finalFund = shortHelper.plus(shortHelper.minus(withFee));
+          coinAmount = 0;
           failedOrder++;
           openPositions = 0;
         }
       }
     }
   }
-  let percentage = mathjs.divide(
-    mathjs.subtract(finalFund, startFund),
-    startFund
-  );
+  let percentage = finalFund.minus(startFund).div(startFund);
   console.log(`
               start Fund ${startFund}
-              final Fund ${mathjs.format(finalFund, {
-                notation: "fixed",
-                precision: 4,
-              })} 
+              final Fund ${finalFund.toFixed()} 
               total Order ${totalOrder}
               successful orders ${successOrder}
               failed orders ${failedOrder}
-              percentage ${mathjs.format(percentage, {
-                notation: "fixed",
-                precision: 4,
-              })}
+              percentage ${percentage.toFixed()}
               `);
 };

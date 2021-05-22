@@ -14,7 +14,7 @@ const test1 = async () => {
   
     await testRsiEmaEngulf({
       pair: "ETHUSDT",
-      interval: "4h",
+      interval: "1h",
       startFund:new Big(200),
       startDate: new Date("2020-01-01T00:00:00"),
       endDate: new Date("2021-01-01T00:00:00"),
@@ -24,7 +24,16 @@ const test1 = async () => {
   
 };
 
+const test2= async()=>{
+  await stochMacdRsi({
+      pair: "ETHUSDT",
+      interval: "1h",
+      startFund:new Big(200),
+      startDate: new Date("2020-01-01T00:00:00"),
+      endDate: new Date("2021-01-01T00:00:00"),
+  });
+}
 
 //console.log(util.inspect(talib.explain("MACD"), { depth:5 }));
 
-test1();
+test2();
