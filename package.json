@@ -1,0 +1,21 @@
+{
+  "name": "trade-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Berk Altuğ",
+  "license": "ISC",
+  "dependencies": {
+    "big.js": "^6.1.1",
+    "dotenv": "^8.2.0",
+    "lodash": "^4.17.21",
+    "mathjs": "^9.3.2",
+    "node-binance-api": "^0.12.5",
+    "prompt-sync": "^4.2.0",
+    "talib": "^1.1.4",
+    "technicalindicators": "^3.1.0"
+  }
+}
