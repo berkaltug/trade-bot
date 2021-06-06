@@ -9,9 +9,10 @@ const {
   Highest,
 } = require("technicalindicators");
 const _ = require("lodash");
-const { intervalToMs } = require("./rsiEmaEngulf");
 const talib = require("talib");
 const Big=require("big.js");
+const BigNumber = require("bignumber.js");
+const {intervalToMs} = require("./utils");
 exports.stochMacdRsi = async ({
   pair,
   interval,
@@ -125,9 +126,10 @@ exports.stochMacdRsi = async ({
               //son 5 mumun en düşüğü bulunuyor
               const lowestArr = [];
               for (let k = 1; k < 6; k++) {
-                lowestArr.push(low[i - k]);
+                lowestArr.push(low[i - k].toFixed());
               }
-              stopLoss = Math.min(lowestArr);
+              console.log(lowestArr);
+              stopLoss = BigNumber.min(lowestArr);
               takeProfit = open[i].plus(open[i].minus(stopLoss).times(1.5))
               totalOrder++;
               positionType = "long";
@@ -156,9 +158,10 @@ exports.stochMacdRsi = async ({
               //son 5 mumun en düşüğü bulunuyor
               const highestArr = [];
               for (let k = 1; k < 6; k++) {
-                highestArr.push(high[i - k]);
+                highestArr.push(high[i - k].toFixed());
               }
-              stopLoss = Math.max(highestArr);
+              console.log(highestArr);
+              stopLoss = BigNumber.max(highestArr);
               takeProfit = open[i].minus(stopLoss.minus(open[i]).times(1.5));
               totalOrder++;
               positionType = "short";

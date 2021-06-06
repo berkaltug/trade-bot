@@ -10,14 +10,16 @@ const mathjs = require("./src/mathConfig");
 const { testRsiEmaEngulf } = require("./src/rsiEmaEngulf");
 const { stochMacdRsi } = require("./src/stochMacdRsi");
 const Big = require("big.js");
+Big.DP = 10;
+
 const test1 = async () => {
   
     await testRsiEmaEngulf({
       pair: "ETHUSDT",
-      interval: "1h",
+      interval: "1m",
       startFund:new Big(200),
-      startDate: new Date("2020-01-01T00:00:00"),
-      endDate: new Date("2021-01-01T00:00:00"),
+      startDate: new Date("2020-12-01T00:00:00"),
+      endDate: new Date("2020-12-30T00:00:00"),
       tpMultiplier:2,
       slMultiplier:1.5
     });
@@ -36,4 +38,4 @@ const test2= async()=>{
 
 //console.log(util.inspect(talib.explain("MACD"), { depth:5 }));
 
-test2();
+test1();

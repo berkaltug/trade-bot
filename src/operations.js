@@ -24,7 +24,7 @@ exports.getUSDTPairs = async () => {
 
 exports.getCoinPrices = ({ pair, interval, limit, endDate }) => {
   return new Promise((resolve, reject) => {
-    setTimeout(() => {}, 250); // binance apimiz bloklanmasın diye acık bekletiyoz
+    setTimeout(() => {}, 100); // binance apimiz bloklanmasın diye acık bekletiyoz
     binance.candlesticks(
       pair,
       interval,
