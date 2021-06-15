@@ -1,8 +1,9 @@
 const Big = require('big.js');
+Big.DP = 10;
 const {getCoinPrices} = require('./operations');
 const { intervalToMs } = require("./utils");
-
-exports.FetchAndPrepareValues = (
+const _ =require('lodash');
+exports.fetchAndPrepareValues = async (
   pair,
   interval,
   startFund,
@@ -42,6 +43,9 @@ exports.FetchAndPrepareValues = (
   let lastDateMs = startMs + dividerMs * limit;
   for (let i = 0; i < requestCount; i++) {
     try {
+      if(new Date(lastDateMs)>new Date()){
+        lastDateMs=endDate.getTime();
+      }
       let ticks = await getCoinPrices({
         pair,
         interval,

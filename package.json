@@ -11,12 +11,17 @@
   "dependencies": {
     "big.js": "^6.1.1",
     "bignumber.js": "^9.0.1",
+    "ccxt": "^1.51.20",
+    "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "lodash": "^4.17.21",
     "mathjs": "^9.3.2",
+    "moment": "^2.29.1",
     "node-binance-api": "^0.12.5",
+    "node-fetch": "^2.6.1",
     "prompt-sync": "^4.2.0",
     "talib": "^1.1.4",
-    "technicalindicators": "^3.1.0"
+    "technicalindicators": "^3.1.0",
+    "tulind": "^0.8.18"
   }
 }

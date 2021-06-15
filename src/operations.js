@@ -21,16 +21,17 @@ exports.getUSDTPairs = async () => {
   });
   return usdtPairs;
 };
-
 exports.getCoinPrices = ({ pair, interval, limit, endDate }) => {
+  // setTimeout(() => {
+    
+  // }, 50);
   return new Promise((resolve, reject) => {
-    setTimeout(() => {}, 100); // binance apimiz bloklanmasın diye acık bekletiyoz
     binance.candlesticks(
       pair,
       interval,
       (error, ticks, symbol) => {
         if (error) {
-          reject(error?.body);
+          reject(error);
         } else {
           resolve(ticks);
         }
@@ -39,3 +40,7 @@ exports.getCoinPrices = ({ pair, interval, limit, endDate }) => {
     );
   });
 };
+
+exports.getBybitPrices=function(){
+
+}
