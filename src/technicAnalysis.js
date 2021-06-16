@@ -32,7 +32,7 @@ exports.engulfingCheck = (
   }
 };
 
-exports.calculateIndicators= async (result)=>{
+exports.calculateIndicators= (result)=>{
   const open=[],high=[],close=[],low=[];
   result && result.length && result.forEach(element => {
     open.push(element[1])
