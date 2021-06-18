@@ -3,7 +3,7 @@ Big.DP = 10;
 exports.SellOperation = (dataset, i) => {
   //satım için kontrol ediyor
   if (dataset.positionType === "long") {
-    if (dataset.high[i] >= dataset.takeProfit) {
+    if (dataset.close[i] >= dataset.takeProfit) {
       let amount = dataset.takeProfit.times(dataset.coinAmount);
       //komisyon kesimi
       let withFee = amount.plus(amount.div(100000).times(25));
@@ -11,7 +11,7 @@ exports.SellOperation = (dataset, i) => {
       dataset.coinAmount = 0;
       dataset.successLongOrder++;
       dataset.openPositions = 0;
-    } else if (dataset.low[i] <= dataset.stopLoss) {
+    } else if (dataset.close[i] <= dataset.stopLoss) {
       let amount = dataset.stopLoss.times(dataset.coinAmount);
       //komisyon kesimi
       let withFee = amount.plus(amount.div(100000).times(25));
@@ -22,7 +22,7 @@ exports.SellOperation = (dataset, i) => {
     }
   }
   if (dataset.positionType === "short") {
-    if (dataset.low[i] <= dataset.takeProfit) {
+    if (dataset.close[i] <= dataset.takeProfit) {
       let amount = dataset.takeProfit.times(dataset.coinAmount);
       //komisyon kesimi
       let withFee = amount.minus(amount.div(100000).times(25));
@@ -32,7 +32,7 @@ exports.SellOperation = (dataset, i) => {
       dataset.coinAmount = 0;
       dataset.successShortOrder++;
       dataset.openPositions = 0;
-    } else if (dataset.high[i] >= dataset.stopLoss) {
+    } else if (dataset.close[i] >= dataset.stopLoss) {
       let amount = dataset.stopLoss.times(dataset.coinAmount);
       //komisyon kesimi
       let withFee = amount.minus(amount.div(100000).times(25));

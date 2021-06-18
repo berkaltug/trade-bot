@@ -43,9 +43,9 @@ test3=async()=>{
     pair: "ETHUSDT",
       interval: "1m",
       startFund:new Big(7012),
-      startDate: new Date("2021-06-01T00:00:00"),
-      endDate: new Date("2021-06-18T00:00:00"),
-      tpMultiplier:1.5,
+      startDate: new Date("2021-01-01T00:00:00"),
+      endDate: new Date("2021-05-30T00:00:00"),
+      tpMultiplier:2,
       slMultiplier:1.7
   });
   let now2=Date.now()
