@@ -103,7 +103,7 @@ exports.trade = async ({
           const amount = buyMoney.div(lastPrice);
           const ATR = new Big(last(atr));
           const stop_loss = lastPrice.minus(ATR.times(1.7));
-          const take_profit = lastPrice.plus(ATR.times(1.5));
+          const take_profit = lastPrice.plus(ATR.times(2));
           const params = {
             stop_loss: stop_loss.toFixed(2),
             take_profit: take_profit.toFixed(2),
@@ -133,7 +133,7 @@ exports.trade = async ({
           const amount = buyMoney.div(lastPrice);
           const ATR = new Big(last(atr));
           const stop_loss = lastPrice.plus(ATR.times(1.7));
-          const take_profit = lastPrice.minus(ATR.times(1.5));
+          const take_profit = lastPrice.minus(ATR.times(2));
           const params = {
             stop_loss: stop_loss.toFixed(2),
             take_profit: take_profit.toFixed(2),
