@@ -1,6 +1,7 @@
 const bybit = require("./src/bybit");
 const moment = require("moment");
 const talib = require("talib");
+const http = require('http');
 const {
   CrossDown,
   CrossUp,
@@ -42,4 +43,3 @@ const testnet = () => {
 };
 
 testnet();
-// getPositions("ETHUSDT").then(res=>console.log(res))

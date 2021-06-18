@@ -43,8 +43,8 @@ test3=async()=>{
     pair: "ETHUSDT",
       interval: "1m",
       startFund:new Big(7012),
-      startDate: new Date("2021-05-01T00:00:00"),
-      endDate: new Date("2021-05-08T00:00:00"),
+      startDate: new Date("2021-06-17T00:00:00"),
+      endDate: new Date("2021-06-18T00:00:00"),
       tpMultiplier:1.5,
       slMultiplier:1.7
   });
