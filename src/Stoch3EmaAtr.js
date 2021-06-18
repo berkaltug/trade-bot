@@ -68,8 +68,8 @@ exports.Stoch3EmaAtr = async ({
         if (
           (stochCrossUps[i - 1] || stochCrossUps[i]) 
           &&
-          stochK[i] <50 &&
-          stochD[i] <50
+          stochK[i] <20 &&
+          stochD[i] <20
         ) {
           buyLong(dataset, i);
           dataset.takeProfit = dataset.close[i - 1].plus(
@@ -83,16 +83,18 @@ exports.Stoch3EmaAtr = async ({
         if (
           (stochCrossDowns[i - 1] || stochCrossDowns[i]) 
           &&
-          stochK[i] >50 &&
-          stochD[i] >50
-        )
+          stochK[i] >80 &&
+          stochD[i] >80
+        ){
           buyShort(dataset, i);
-        dataset.takeProfit = dataset.close[i - 1].minus(
-          atr[i].times(tpMultiplier)
-        );
-        dataset.stopLoss = dataset.close[i - 1].plus(
-          atr[i].times(slMultiplier)
-        );
+          dataset.takeProfit = dataset.close[i - 1].minus(
+            atr[i].times(tpMultiplier)
+          );
+          dataset.stopLoss = dataset.close[i - 1].plus(
+            atr[i].times(slMultiplier)
+          );
+        }
+          
       }
     }
     if (dataset.openPositions === 1) {

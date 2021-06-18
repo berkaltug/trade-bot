@@ -92,8 +92,8 @@ exports.trade = async ({
         console.log(" long emalar sağlandı");
         if (
           (last(stochCrossUps) || stochCrossUps[stochCrossUps.length - 2]) &&
-          last(stochK) < 50 &&
-          last(stochD) < 50
+          last(stochK) > 50 &&
+          last(stochD) > 50
         ) {
           console.log("buying long");
           const moneyResponse = await bybit.fetchBalance();
@@ -122,8 +122,8 @@ exports.trade = async ({
         if (
           (last(stochCrossDowns) ||
             stochCrossDowns[stochCrossDowns.length - 1]) &&
-          last(stochK) > 50 &&
-          last(stochD) > 50
+          last(stochK) < 50 &&
+          last(stochD) < 50
         ) {
           console.log("buying short");
           const moneyResponse =await bybit.fetchBalance();

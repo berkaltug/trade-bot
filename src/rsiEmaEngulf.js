@@ -110,6 +110,6 @@ exports.testRsiEmaEngulf = async ({
               failed long orders ${dataset.failedLongOrder}
               successful short orders ${dataset.successShortOrder}
               failed short orders ${dataset.failedShortOrder}
-              
+              percentage ${dataset.percentage}
               `);
 };
