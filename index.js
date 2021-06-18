@@ -1,7 +1,6 @@
 const bybit = require("./src/bybit");
 const moment = require("moment");
 const talib = require("talib");
-const http = require('http');
 const {
   CrossDown,
   CrossUp,
@@ -11,6 +10,10 @@ const {
   Stochastic,
 } = require("technicalindicators");
 const tulind = require("tulind");
+const express = require('express');
+const app=express();
+const dotenv =require('dotenv');
+const port=process.env.PORT || 3000;
 const {
   getPositions,
   getOrders,
@@ -18,6 +21,7 @@ const {
 } = require("./src/requests/nativeRequests");
 const { getLastPrice, getBybitPrices, trade } = require("./src/operations");
 const { calculateIndicators } = require("./src/technicAnalysis");
+
 
 const testnet = () => {
   setInterval(async () => {
@@ -42,4 +46,7 @@ const testnet = () => {
   }, 60000);
 };
 
-testnet();
+app.listen(port,()=>{
+  console.log(`bot started on port ${port}`);
+  testnet();
+})
