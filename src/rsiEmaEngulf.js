@@ -64,10 +64,10 @@ exports.testRsiEmaEngulf = async ({
         if (dataset.open[i] > ema200Result[i] && rsiResult[i] > 50) {
           buyLong(dataset,i);
           dataset.stopLoss = dataset.close[i - 1].minus(
-            dataset.close[i - 1].minus(dataset.open[i - 1]).times(slMultiplier)
+            new Big(atrResult[i]).times(slMultiplier)
           );
           dataset.takeProfit = dataset.close[i - 1].plus(
-            dataset.close[i - 1].minus(dataset.open[i - 1]).times(tpMultiplier)
+            new Big(atrResult[i]).times(tpMultiplier)
           );
         }
       }
@@ -75,10 +75,10 @@ exports.testRsiEmaEngulf = async ({
         if (dataset.open[i] < ema200Result[i] && rsiResult[i] < 50) {
           buyShort(dataset,i);
           dataset.stopLoss = dataset.close[i - 1].plus(
-            dataset.open[i - 1].minus(dataset.close[i - 1]).times(slMultiplier)
+            new Big(atrResult[i]).times(slMultiplier)
           );
           dataset.takeProfit = dataset.close[i - 1].minus(
-            dataset.open[i - 1].minus(dataset.close[i - 1]).times(tpMultiplier)
+            new Big(atrResult[i]).times(tpMultiplier)
           );
         }
       }
@@ -110,6 +110,6 @@ exports.testRsiEmaEngulf = async ({
               failed long orders ${dataset.failedLongOrder}
               successful short orders ${dataset.successShortOrder}
               failed short orders ${dataset.failedShortOrder}
-              percentage ${dataset.percentage}
+              percentage ${percentage}
               `);
 };

@@ -17,12 +17,12 @@ const test1 = async () => {
   
     await testRsiEmaEngulf({
       pair: "ETHUSDT",
-      interval: "15m",
+      interval: "1m",
       startFund:new Big(200),
-      startDate: new Date("2020-11-01T00:00:00"),
-      endDate: new Date("2020-11-30T00:00:00"),
-      tpMultiplier:2,
-      slMultiplier:1.7
+      startDate: new Date("2020-12-01T00:00:00"),
+      endDate: new Date("2020-12-30T00:00:00"),
+      tpMultiplier:3,
+      slMultiplier:2.7
     });
   
 };
@@ -41,10 +41,10 @@ test3=async()=>{
   let now1=Date.now()
   await Stoch3EmaAtr({
     pair: "ETHUSDT",
-      interval: "1h",
-      startFund:new Big(5000),
-      startDate: new Date("2021-01-01T00:00:00"),
-      endDate: new Date("2021-01-30T00:00:00"),
+      interval: "1m",
+      startFund:new Big(200),
+      startDate: new Date("2020-06-19T00:00:00"),
+      endDate: new Date("2020-06-19T12:06:00"),
       tpMultiplier:2,
       slMultiplier:1.7
   });
@@ -52,4 +52,4 @@ test3=async()=>{
   console.log((now2-now1)/1000)
 }
 
-test1();
+test3();

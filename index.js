@@ -27,8 +27,8 @@ const testnet = () => {
   setInterval(async () => {
     let result = await getBybitPrices(
       "ETH/USDT",
-      "1m",
-      moment().subtract(200, "minutes")
+      "5m",
+      moment().subtract(1000, "minutes")
     );
     let { ema8, ema14, ema50,stochK,stochD, stochCrossUps, stochCrossDowns, atr } =
       calculateIndicators(result);
@@ -43,7 +43,7 @@ const testnet = () => {
       stochD,
       atr,
     });
-  }, 60000);
+  }, 60000*5);
 };
 
 app.listen(port,()=>{
