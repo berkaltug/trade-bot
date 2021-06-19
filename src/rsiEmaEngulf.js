@@ -4,7 +4,7 @@ const _ = require("lodash");
 const { engulfingCheck } = require("./technicAnalysis");
 const { intervalToMs } = require("./utils");
 const Big = require("big.js");
-const {  SellOperation, SellOperationNoCommission, buyShort, buyLong, buyLongNoCommission, buyShortNoCommission } = require("./buySellOperations");
+const {  sellOperation, SellOperationNoCommission, buyShort, buyLong, buyLongNoCommission, buyShortNoCommission } = require("./buySellOperations");
 const { fetchAndPrepareValues } = require("./backTestPreperation");
 Big.DP = 10;
 exports.testRsiEmaEngulf = async ({
@@ -83,7 +83,7 @@ exports.testRsiEmaEngulf = async ({
         }
       }
     } else if (dataset.openPositions === 1) {
-      SellOperation(dataset,i)
+      sellOperation(dataset,i)
     }
   }
 

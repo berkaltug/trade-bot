@@ -11,6 +11,7 @@ const { testRsiEmaEngulf } = require("./src/rsiEmaEngulf");
 const { stochMacdRsi } = require("./src/stochMacdRsi");
 const Big = require("big.js");
 const { Stoch3EmaAtr } = require("./src/Stoch3EmaAtr");
+const { rsiEma } = require("./src/rsiEma");
 Big.DP = 10;
 
 const test1 = async () => {
@@ -52,4 +53,17 @@ test3=async()=>{
   console.log((now2-now1)/1000)
 }
 
-test3();
+test4=async()=>{
+  let now1=Date.now()
+  await rsiEma({
+    pair:"ETHUSDT",
+    interval:"5m",
+    startFund:new Big(200),
+    startDate:new Date("2021-06-01T00:00:00"),
+    endDate:new Date("2021-06-19T23:50:00"),
+    tpMultiplier:2,
+    slMultiplier:2.5
+  });
+}
+
+test4();

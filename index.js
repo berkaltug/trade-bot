@@ -19,8 +19,8 @@ const {
   getOrders,
   cancelAllOrders,
 } = require("./src/requests/nativeRequests");
-const { getLastPrice, getBybitPrices, trade } = require("./src/operations");
-const { calculateIndicators } = require("./src/technicAnalysis");
+const { getLastPrice, getBybitPrices, trade, trade2 } = require("./src/operations");
+const { calculateIndicators, calculateIndicators2 } = require("./src/technicAnalysis");
 
 
 const testnet = () => {
@@ -46,7 +46,24 @@ const testnet = () => {
   }, 60000*5);
 };
 
+const rsiEmaRealTest=()=>{
+  setTimeout(async()=>{
+    const result = await getBybitPrices(
+      "ETH/USDT",
+      "5m",
+      moment().subtract(1000, "minutes")
+    );
+    const {ema14,crossUps,crossDowns,atr}=calculateIndicators2(result);
+    await trade2({
+      pair:"ETH/USDT",
+      atr,
+      ema14,
+      crossUps,
+      crossDowns
+    })
+  },60000*5)
+}
 app.listen(port,()=>{
   console.log(`bot started on port ${port}`);
-  testnet();
+  rsiEmaRealTest();
 })

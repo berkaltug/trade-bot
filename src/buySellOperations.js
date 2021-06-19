@@ -1,6 +1,6 @@
 const Big = require("big.js");
 Big.DP = 10;
-exports.SellOperation = (dataset, i) => {
+exports.sellOperation = (dataset, i) => {
   //satım için kontrol ediyor
   if (dataset.positionType === "long") {
     if (dataset.high[i] >= dataset.takeProfit) {

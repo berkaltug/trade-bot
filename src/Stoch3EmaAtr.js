@@ -11,7 +11,7 @@ const talib = require("talib");
 const tulind = require("tulind");
 const Big = require("big.js");
 const { fetchAndPrepareValues } = require("./backTestPreperation");
-const { buyLong, buyShort, SellOperation, SellOperationNoCommission, buyLongNoCommission, buyShortNoCommission } = require("./buySellOperations");
+const { buyLong, buyShort, sellOperation, SellOperationNoCommission, buyLongNoCommission, buyShortNoCommission } = require("./buySellOperations");
 
 exports.Stoch3EmaAtr = async ({
   pair,
@@ -98,7 +98,7 @@ exports.Stoch3EmaAtr = async ({
       }
     }
     if (dataset.openPositions === 1) {
-      SellOperation(dataset, i);
+      sellOperation(dataset, i);
     }
   }
 

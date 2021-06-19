@@ -153,3 +153,75 @@ exports.trade = async ({
     console.error(error);
   }
 };
+
+exports.trade2=async({
+  pair,
+  atr,
+  crossDowns,
+  crossUps,
+  ema14
+})=>{
+  try {
+    const bybitPair = pair.replace("/", "");
+    const orders = await getOrders(bybitPair);
+    const positions = await getPositions(bybitPair);
+
+    if (positions.result[0].size==0 || positions.result[1].size==0) {
+      if (orders.result.length && orders.result.length > 0) {
+        //pozisyon yok ama filled olmayan order beklemede demek
+        await cancelAllOrders(bybitPair);
+      }
+      const lastPrice = new Big(await this.getLastPrice(pair));
+      if(last(crossUps) || crossUps[crossUps.length-2]){
+        if(lastPrice < last(ema14)){
+          console.log("buying long");
+          const moneyResponse = await bybit.fetchBalance();
+          const money=new Big(moneyResponse.USDT.free);
+          const buyMoney = money.times(99).div(100);
+          const amount = buyMoney.div(lastPrice);
+          const ATR = new Big(last(atr));
+          const stop_loss = lastPrice.minus(ATR.times(2.5));
+          const take_profit = lastPrice.plus(ATR.times(2));
+          const params = {
+            stop_loss: stop_loss.toFixed(2),
+            take_profit: take_profit.toFixed(2),
+          };
+          bybit.createOrder(
+            pair,
+            "limit",
+            "buy",
+            amount.toFixed(2),
+            lastPrice.toFixed(2),
+            params
+          );
+        }
+      }
+      else if(last(crossDowns) || crossDowns[crossDowns.length-2]){
+        if(lastPrice > last(ema14)){
+          console.log("buying short");
+          const moneyResponse =await bybit.fetchBalance();
+          const money=new Big(moneyResponse.USDT.free);
+          const buyMoney = money.times(99).div(100);
+          const amount = buyMoney.div(lastPrice);
+          const ATR = new Big(last(atr));
+          const stop_loss = lastPrice.plus(ATR.times(2.5));
+          const take_profit = lastPrice.minus(ATR.times(2));
+          const params = {
+            stop_loss: stop_loss.toFixed(2),
+            take_profit: take_profit.toFixed(2),
+          };
+          bybit.createOrder(
+            pair,
+            "limit",
+            "sell",
+            amount.toFixed(2),
+            lastPrice.toFixed(2),
+            params
+          );
+        }
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
