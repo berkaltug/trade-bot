@@ -51,7 +51,7 @@ const rsiEmaRealTest=()=>{
     const result = await getBybitPrices(
       "ETH/USDT",
       "5m",
-      moment().subtract(1000, "minutes")
+      moment().subtract(200, "minutes")
     );
     const {ema14,crossUps,crossDowns,atr}=calculateIndicators2(result);
     await trade2({
@@ -61,7 +61,7 @@ const rsiEmaRealTest=()=>{
       crossUps,
       crossDowns
     })
-  },60000*5)
+  },60000)
 }
 app.listen(port,()=>{
   console.log(`bot started on port ${port}`);
