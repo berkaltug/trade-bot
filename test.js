@@ -57,12 +57,12 @@ test4=async()=>{
   let now1=Date.now()
   await rsiEma({
     pair:"ETHUSDT",
-    interval:"5m",
+    interval:"1m",
     startFund:new Big(200),
-    startDate:new Date("2021-06-01T00:00:00"),
-    endDate:new Date("2021-06-19T23:50:00"),
+    startDate:new Date("2021-01-01T00:00:00"),
+    endDate:new Date("2021-05-30T24:00:00"),
     tpMultiplier:2,
-    slMultiplier:2.5
+    slMultiplier:2.2
   });
 }
 

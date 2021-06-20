@@ -50,7 +50,7 @@ const rsiEmaRealTest=()=>{
   setTimeout(async()=>{
     const result = await getBybitPrices(
       "ETH/USDT",
-      "5m",
+      "1m",
       moment().subtract(200, "minutes")
     );
     const {ema14,crossUps,crossDowns,atr}=calculateIndicators2(result);
