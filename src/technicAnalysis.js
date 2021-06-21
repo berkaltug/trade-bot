@@ -2,6 +2,7 @@ const {
   CrossDown,
   CrossUp,
   StochasticRSI,
+  MACD,
   EMA,
   ATR,
   RSI,
@@ -46,30 +47,36 @@ exports.calculateIndicators = (result) => {
       low.push(element[3]);
       close.push(element[4]);
     });
-  const ema8 = EMA.calculate({
-    period: 8,
+  const ema9 = EMA.calculate({
+    period: 9,
     values: close,
   });
   const ema14 = EMA.calculate({
     period: 14,
     values: close,
   });
-  const ema50 = EMA.calculate({
-    period: 50,
+  const ema26 = EMA.calculate({
+    period: 26,
     values: close,
   });
-  //tulind stoch ve technicalindicators stoch çıktısı karşılaştırıldı ikiside aynı çıktı verdi.
-  const stochastic = Stochastic.calculate({
-    high,
-    low,
-    close,
-    period: 14,
-    signalPeriod: 3,
+  const macd=MACD.calculate({
+    values:close,
+    fastPeriod:12,
+    slowPeriod:26,
+    signalPeriod      : 9,
+    SimpleMAOscillator: false,
+    SimpleMASignal    : false
   });
-  const stochK = stochastic.map((element) => element.k);
-  const stochD = stochastic.map((element) => element.d);
-  const stochCrossUps = CrossUp.calculate({ lineA: stochK, lineB: stochD });
-  const stochCrossDowns = CrossDown.calculate({ lineA: stochK, lineB: stochD });
+
+  const rsi = RSI.calculate({
+    period: 14,
+    values: close,
+  });
+
+  const macdLine = macd.map((element) => element.MACD);
+  const macdSignal = macd.map((element) => element.signal);
+  const macdCrossUps = CrossUp.calculate({ lineA: macdLine, lineB: macdSignal });
+  const macdCrossDowns = CrossDown.calculate({ lineA: macdLine, lineB: macdSignal });
   const atr = ATR.calculate({
     high,
     low,
@@ -77,13 +84,13 @@ exports.calculateIndicators = (result) => {
     period: 14,
   });
   return {
-    ema8,
+    ema9,
     ema14,
-    ema50,
-    stochD,
-    stochK,
-    stochCrossUps,
-    stochCrossDowns,
+    ema26,
+    rsi,
+    macd,
+    macdCrossUps,
+    macdCrossDowns,
     atr,
   };
 };

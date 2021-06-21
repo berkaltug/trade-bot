@@ -50,9 +50,11 @@ exports.getCoinPrices = ({ pair, interval, limit, endDate }) => {
 
 exports.getBybitPrices = async (pair, interval, since) => {
   try {
-    let result = await bybit.fetchOHLCV(pair, interval, since,undefined,{recvWindow:20000});//limit undefined gönder belirtmeye gerek yok
+    let result = await bybit.fetchOHLCV(pair, interval, since, undefined, {
+      recvWindow: 20000,
+    }); //limit undefined gönder belirtmeye gerek yok
     const lastPrice = last(result)[4];
-    result.pop(); // don't look current candle
+    // result.pop(); // don't look current candle
     return result;
   } catch (e) {
     console.error(e);
@@ -61,7 +63,7 @@ exports.getBybitPrices = async (pair, interval, since) => {
 exports.getLastPrice = async (pair) => {
   let now1 = Date.now();
   try {
-    const ticker = await bybit.fetchTicker(pair,{recvWindow:20000});
+    const ticker = await bybit.fetchTicker(pair, { recvWindow: 20000 });
     return ticker.last;
   } catch (e) {
     console.error("error while fetching last price", e);
@@ -70,83 +72,80 @@ exports.getLastPrice = async (pair) => {
 
 exports.trade = async ({
   pair,
-  ema8,
+  ema9,
   ema14,
-  ema50,
-  stochCrossUps,
-  stochCrossDowns,
-  stochK,
-  stochD,
+  ema26,
+  macdCrossUps,
+  macdCrossDowns,
   atr,
+  rsi,
 }) => {
   try {
     const bybitPair = pair.replace("/", "");
     const orders = await getOrders(bybitPair);
     const positions = await getPositions(bybitPair);
-    if (positions.result[0].size==0 || positions.result[1].size==0) {
+    if (positions.result[0].size == 0 || positions.result[1].size == 0) {
       if (orders.result.length && orders.result.length > 0) {
         //pozisyon yok ama filled olmayan order beklemede demek
         await cancelAllOrders(bybitPair);
       }
-      if (last(ema8) > last(ema14) && last(ema14) > last(ema50)) {
-        console.log(" long emalar sağlandı");
-        if (
-          (last(stochCrossUps) || stochCrossUps[stochCrossUps.length - 2]) &&
-          last(stochK) > 50 &&
-          last(stochD) > 50
-        ) {
-          console.log("buying long");
-          const moneyResponse = await bybit.fetchBalance();
-          const money=new Big(moneyResponse.USDT.free);
-          const buyMoney = money.times(99).div(100);
-          const lastPrice = new Big(await this.getLastPrice(pair));
-          const amount = buyMoney.div(lastPrice);
-          const ATR = new Big(last(atr));
-          const stop_loss = lastPrice.minus(ATR.times(1.7));
-          const take_profit = lastPrice.plus(ATR.times(2));
-          const params = {
-            stop_loss: stop_loss.toFixed(2),
-            take_profit: take_profit.toFixed(2),
-          };
-          bybit.createOrder(
-            pair,
-            "limit",
-            "buy",
-            amount.toFixed(2),
-            lastPrice.toFixed(2),
-            params
-          );
+      let crossUp, crossDown;
+      const reverseCrossUps = macdCrossUps.reverse();
+      const reverseCrossDowns = macdCrossDowns.reverse();
+      for (let i = 0; i < 8; i++) {
+        if (reverseCrossUps[i]) {
+          crossUp = true;
+          crossDown = false;
         }
-      } else if (last(ema8) < last(ema14) && last(ema14) < last(ema50)) {
-        console.log("short emalar sağlandı");
-        if (
-          (last(stochCrossDowns) ||
-            stochCrossDowns[stochCrossDowns.length - 1]) &&
-          last(stochK) < 50 &&
-          last(stochD) < 50
-        ) {
-          console.log("buying short");
-          const moneyResponse =await bybit.fetchBalance();
-          const money=new Big(moneyResponse.USDT.free);
-          const buyMoney = money.times(99).div(100);
-          const lastPrice = new Big(await this.getLastPrice(pair));
-          const amount = buyMoney.div(lastPrice);
-          const ATR = new Big(last(atr));
-          const stop_loss = lastPrice.plus(ATR.times(1.7));
-          const take_profit = lastPrice.minus(ATR.times(2));
-          const params = {
-            stop_loss: stop_loss.toFixed(2),
-            take_profit: take_profit.toFixed(2),
-          };
-          bybit.createOrder(
-            pair,
-            "limit",
-            "sell",
-            amount.toFixed(2),
-            lastPrice.toFixed(2),
-            params
-          );
+        if (reverseCrossDowns[i]) {
+          crossDown = true;
+          crossUp = false;
         }
+      }
+      if (crossUp && last(rsi) > 50) {
+        console.log("buying long");
+        const moneyResponse = await bybit.fetchBalance();
+        const money = new Big(moneyResponse.USDT.free);
+        const buyMoney = money.times(99).div(100);
+        const lastPrice = new Big(await this.getLastPrice(pair));
+        const amount = buyMoney.div(lastPrice);
+        const ATR = new Big(last(atr));
+        const stop_loss = lastPrice.minus(ATR.times(2.2));
+        const take_profit = lastPrice.plus(ATR.times(2));
+        const params = {
+          stop_loss: stop_loss.toFixed(2),
+          take_profit: take_profit.toFixed(2),
+        };
+        bybit.createOrder(
+          pair,
+          "limit",
+          "buy",
+          amount.toFixed(2, Big.roundDown),
+          lastPrice.toFixed(2),
+          params
+        );
+      } else if (crossDown && last(rsi) < 50) {
+        console.log("buying short");
+        const moneyResponse = await bybit.fetchBalance();
+        const money = new Big(moneyResponse.USDT.free);
+        const buyMoney = money.times(99).div(100);
+        const lastPrice = new Big(await this.getLastPrice(pair));
+        const amount = buyMoney.div(lastPrice);
+        const ATR = new Big(last(atr));
+        const stop_loss = lastPrice.plus(ATR.times(2.2));
+        const take_profit = lastPrice.minus(ATR.times(2));
+        const params = {
+          stop_loss: stop_loss.toFixed(2),
+          take_profit: take_profit.toFixed(2),
+        };
+        bybit.createOrder(
+          pair,
+          "limit",
+          "sell",
+          amount.toFixed(2, Big.roundDown),
+          lastPrice.toFixed(2),
+          params
+        );
       }
     }
   } catch (error) {
@@ -154,29 +153,23 @@ exports.trade = async ({
   }
 };
 
-exports.trade2=async({
-  pair,
-  atr,
-  crossDowns,
-  crossUps,
-  ema14
-})=>{
+exports.trade2 = async ({ pair, atr, crossDowns, crossUps, ema14 }) => {
   try {
     const bybitPair = pair.replace("/", "");
     const orders = await getOrders(bybitPair);
     const positions = await getPositions(bybitPair);
 
-    if (positions.result[0].size==0 || positions.result[1].size==0) {
+    if (positions.result[0].size == 0 || positions.result[1].size == 0) {
       if (orders.result.length && orders.result.length > 0) {
         //pozisyon yok ama filled olmayan order beklemede demek
         await cancelAllOrders(bybitPair);
       }
       const lastPrice = new Big(await this.getLastPrice(pair));
-      if(last(crossUps) || crossUps[crossUps.length-2]){
-        if(lastPrice < last(ema14)){
+      if (last(crossUps) || crossUps[crossUps.length - 2]) {
+        if (lastPrice < last(ema14)) {
           console.log("buying long");
           const moneyResponse = await bybit.fetchBalance();
-          const money=new Big(moneyResponse.USDT.free);
+          const money = new Big(moneyResponse.USDT.free);
           const buyMoney = money.times(99).div(100);
           const amount = buyMoney.div(lastPrice);
           const ATR = new Big(last(atr));
@@ -195,12 +188,11 @@ exports.trade2=async({
             params
           );
         }
-      }
-      else if(last(crossDowns) || crossDowns[crossDowns.length-2]){
-        if(lastPrice > last(ema14)){
+      } else if (last(crossDowns) || crossDowns[crossDowns.length - 2]) {
+        if (lastPrice > last(ema14)) {
           console.log("buying short");
-          const moneyResponse =await bybit.fetchBalance();
-          const money=new Big(moneyResponse.USDT.free);
+          const moneyResponse = await bybit.fetchBalance();
+          const money = new Big(moneyResponse.USDT.free);
           const buyMoney = money.times(99).div(100);
           const amount = buyMoney.div(lastPrice);
           const ATR = new Big(last(atr));
@@ -224,4 +216,4 @@ exports.trade2=async({
   } catch (error) {
     console.error(error);
   }
-}
+};
