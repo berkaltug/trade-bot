@@ -102,7 +102,7 @@ exports.trade = async ({
           crossUp = false;
         }
       }
-      if (crossUp && last(rsi) > 55) {
+      if (crossUp && last(rsi) > 50 && last(mfi) > 50) {
         console.log("buying long");
         const moneyResponse = await bybit.fetchBalance();
         const money = new Big(moneyResponse.USDT.free);
@@ -124,7 +124,7 @@ exports.trade = async ({
           lastPrice.toFixed(2),
           params
         );
-      } else if (crossDown && last(rsi) < 45) {
+      } else if (crossDown && last(rsi) < 50 && last(mfi) < 50) {
         console.log("buying short");
         const moneyResponse = await bybit.fetchBalance();
         const money = new Big(moneyResponse.USDT.free);

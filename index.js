@@ -8,6 +8,7 @@ const {
   EMA,
   ATR,
   Stochastic,
+  MFI,
 } = require("technicalindicators");
 const tulind = require("tulind");
 const express = require('express');
@@ -68,3 +69,4 @@ app.listen(port,()=>{
   console.log(`bot started on port ${port}`);
   testnet();
 })
+

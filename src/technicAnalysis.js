@@ -7,6 +7,7 @@ const {
   ATR,
   RSI,
   Stochastic,
+  MFI,
 } = require("technicalindicators");
 
 exports.engulfingCheck = (
@@ -38,7 +39,8 @@ exports.calculateIndicators = (result) => {
   const open = [],
     high = [],
     close = [],
-    low = [];
+    low = [],
+    volume=[];
   result &&
     result.length &&
     result.forEach((element) => {
@@ -46,6 +48,7 @@ exports.calculateIndicators = (result) => {
       high.push(element[2]);
       low.push(element[3]);
       close.push(element[4]);
+      volume.push(element[5]);
     });
   const ema9 = EMA.calculate({
     period: 9,
@@ -58,6 +61,13 @@ exports.calculateIndicators = (result) => {
   const ema26 = EMA.calculate({
     period: 26,
     values: close,
+  });
+  const mfi=MFI.calculate({
+    period:14,
+    high,
+    low,
+    close,
+    volume
   });
   const macd=MACD.calculate({
     values:close,
@@ -92,6 +102,7 @@ exports.calculateIndicators = (result) => {
     macdCrossUps,
     macdCrossDowns,
     atr,
+    mfi
   };
 };
 
