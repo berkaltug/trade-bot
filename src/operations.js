@@ -79,6 +79,7 @@ exports.trade = async ({
   macdCrossDowns,
   atr,
   rsi,
+  mfi
 }) => {
   try {
     const bybitPair = pair.replace("/", "");

@@ -32,7 +32,7 @@ const testnet = () => {
       "1m",
       moment().subtract(200, "minutes")
     );
-    let { ema9,ema14,ema26, macdCrossUps, macdCrossDowns, atr ,rsi} =
+    let { ema9,ema14,ema26, macdCrossUps, macdCrossDowns, atr ,rsi,mfi} =
       calculateIndicators(result);
     await trade({
       pair: "ETH/USDT",
@@ -43,6 +43,7 @@ const testnet = () => {
       macdCrossDowns,
       rsi,
       atr,
+      mfi
     });
   }, 60000);
 };
@@ -60,7 +61,7 @@ const rsiEmaRealTest=()=>{
       atr,
       ema14,
       crossUps,
-      crossDowns
+      crossDowns,
     })
   },60000)
 }
