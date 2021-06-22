@@ -92,7 +92,7 @@ exports.trade = async ({
       let crossUp, crossDown;
       const reverseCrossUps = macdCrossUps.reverse();
       const reverseCrossDowns = macdCrossDowns.reverse();
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 5; i++) {
         if (reverseCrossUps[i]) {
           crossUp = true;
           crossDown = false;
