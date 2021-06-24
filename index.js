@@ -35,7 +35,7 @@ const testnet = () => {
     let { ema9,ema14,ema26, macdCrossUps, macdCrossDowns, atr ,rsi,mfi} =
       calculateIndicators(result);
     await trade({
-      pair: "ETH/USDT",
+      pair: "BTC/USDT",
       ema9,
       ema14,
       ema26,
