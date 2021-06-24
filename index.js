@@ -28,7 +28,7 @@ const { default: Big } = require("big.js");
 const testnet = () => {
   setInterval(async () => {
     let result = await getBybitPrices(
-      "ETH/USDT",
+      "BTC/USDT",
       "1m",
       moment().subtract(200, "minutes")
     );
