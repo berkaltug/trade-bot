@@ -5,6 +5,6 @@ const bybit=new ccxt.bybit({
 "secret":process.env.BYBIT_TESTNET_API_SECRET,
 "urls":{
     "api":process.env.TESTNET_URL
-}
+},
 });
 module.exports=bybit;

@@ -29,8 +29,8 @@ const testnet = () => {
   setInterval(async () => {
     let result = await getBybitPrices(
       "BTC/USDT",
-      "15m",
-      moment().subtract(200*15, "minutes")
+      "5m",
+      moment().subtract(200*5, "minutes")
     );
     let { ema9,ema14,ema26, macdCrossUps, macdCrossDowns, atr ,rsi,mfi} =
       calculateIndicators(result);
@@ -45,7 +45,7 @@ const testnet = () => {
       atr,
       mfi
     });
-  }, 60000*15);
+  }, 60000*5);
 };
 
 const rsiEmaRealTest=()=>{

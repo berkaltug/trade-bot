@@ -119,7 +119,7 @@ exports.trade = async ({
         };
         bybit.createOrder(
           pair,
-          "limit",
+          "market",
           "buy",
           amount.toFixed(2, Big.roundDown),
           lastPrice.toFixed(2),
@@ -141,7 +141,7 @@ exports.trade = async ({
         };
         bybit.createOrder(
           pair,
-          "limit",
+          "market",
           "sell",
           amount.toFixed(2, Big.roundDown),
           lastPrice.toFixed(2),
