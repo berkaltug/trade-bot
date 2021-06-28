@@ -121,8 +121,8 @@ exports.trade = async ({
           pair,
           "market",
           "buy",
-          amount.toFixed(2, Big.roundDown),
-          lastPrice.toFixed(2),
+          amount.toFixed(4, Big.roundDown),
+          null,//price can be null on market
           params
         );
       } else if (crossDown && last(rsi) < 50 && last(mfi) < 50) {
@@ -143,8 +143,8 @@ exports.trade = async ({
           pair,
           "market",
           "sell",
-          amount.toFixed(2, Big.roundDown),
-          lastPrice.toFixed(2),
+          amount.toFixed(4, Big.roundDown),
+          null,//price can be null on market
           params
         );
       }

@@ -27,6 +27,7 @@ const { default: Big } = require("big.js");
 
 const testnet = () => {
   setInterval(async () => {
+    console.log("ticking... " + moment().format("DD-MM-YYYY HH:mm"))
     let result = await getBybitPrices(
       "BTC/USDT",
       "5m",
