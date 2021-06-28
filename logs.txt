@@ -1,0 +1,100 @@
+2021-06-28T14:52:15.624108+00:00 app[web.1]: (node:21) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 7)
+2021-06-28T14:57:14.145151+00:00 app[web.1]: ticking... 28-06-2021 14:57
+2021-06-28T15:02:14.241894+00:00 app[web.1]: ticking... 28-06-2021 15:02
+2021-06-28T15:06:43.518208+00:00 heroku[router]: at=info method=GET path="/" host=berk-trade-bot.herokuapp.com request_id=7cfe54b3-b74c-4f11-bb77-9de0f9d8869b fwd="54.173.89.96" dyno=web.1 connect=0ms service=2ms status=404 bytes=360 protocol=http
+2021-06-28T15:07:14.265138+00:00 app[web.1]: ticking... 28-06-2021 15:07
+2021-06-28T15:08:50.233619+00:00 heroku[web.1]: Idling
+2021-06-28T15:08:50.257851+00:00 heroku[web.1]: State changed from up to down
+2021-06-28T15:08:51.115345+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2021-06-28T15:08:51.236554+00:00 heroku[web.1]: Process exited with status 143
+2021-06-28T15:33:33.609918+00:00 heroku[web.1]: Unidling
+2021-06-28T15:33:33.613099+00:00 heroku[web.1]: State changed from down to starting
+2021-06-28T15:33:37.937640+00:00 heroku[web.1]: Starting process with command `npm start`
+2021-06-28T15:33:40.564093+00:00 app[web.1]: 
+2021-06-28T15:33:40.564115+00:00 app[web.1]: > trade-bot@1.0.0 start /app
+2021-06-28T15:33:40.564116+00:00 app[web.1]: > node index.js
+2021-06-28T15:33:40.564116+00:00 app[web.1]: 
+2021-06-28T15:33:41.637716+00:00 app[web.1]: bot started on port 37945
+2021-06-28T15:33:42.086572+00:00 heroku[web.1]: State changed from starting to up
+2021-06-28T15:33:43.754921+00:00 heroku[router]: at=info method=GET path="/" host=berk-trade-bot.herokuapp.com request_id=efa77486-bc2c-4fa5-bf2d-7a6d0506aff2 fwd="3.219.247.208" dyno=web.1 connect=0ms service=13ms status=404 bytes=360 protocol=http
+2021-06-28T15:38:41.705490+00:00 app[web.1]: ticking... 28-06-2021 15:38
+2021-06-28T15:43:41.790231+00:00 app[web.1]: ticking... 28-06-2021 15:43
+2021-06-28T15:48:41.890114+00:00 app[web.1]: ticking... 28-06-2021 15:48
+2021-06-28T15:53:41.893976+00:00 app[web.1]: ticking... 28-06-2021 15:53
+2021-06-28T15:58:41.919723+00:00 app[web.1]: ticking... 28-06-2021 15:58
+2021-06-28T16:03:41.973912+00:00 app[web.1]: ticking... 28-06-2021 16:03
+2021-06-28T16:05:16.906717+00:00 heroku[router]: at=info method=GET path="/" host=berk-trade-bot.herokuapp.com request_id=875fe599-80e8-435e-8126-70234fa0db11 fwd="52.55.179.57" dyno=web.1 connect=0ms service=4ms status=404 bytes=360 protocol=http
+2021-06-28T16:07:19.870184+00:00 heroku[web.1]: Idling
+2021-06-28T16:07:19.875401+00:00 heroku[web.1]: State changed from up to down
+2021-06-28T16:07:20.730211+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2021-06-28T16:07:20.827554+00:00 heroku[web.1]: Process exited with status 143
+2021-06-28T16:31:59.852073+00:00 heroku[web.1]: Unidling
+2021-06-28T16:31:59.859714+00:00 heroku[web.1]: State changed from down to starting
+2021-06-28T16:32:06.018143+00:00 heroku[web.1]: Starting process with command `npm start`
+2021-06-28T16:32:12.659393+00:00 app[web.1]: 
+2021-06-28T16:32:12.659435+00:00 app[web.1]: > trade-bot@1.0.0 start /app
+2021-06-28T16:32:12.659435+00:00 app[web.1]: > node index.js
+2021-06-28T16:32:12.659436+00:00 app[web.1]: 
+2021-06-28T16:32:14.624966+00:00 app[web.1]: bot started on port 5148
+2021-06-28T16:32:15.106730+00:00 heroku[web.1]: State changed from starting to up
+2021-06-28T16:32:16.090311+00:00 heroku[router]: at=info method=GET path="/" host=berk-trade-bot.herokuapp.com request_id=04e31c1b-2065-4cf4-b9fd-c619e45c203b fwd="3.216.31.201" dyno=web.1 connect=1ms service=15ms status=404 bytes=360 protocol=http
+2021-06-28T16:37:14.727057+00:00 app[web.1]: ticking... 28-06-2021 16:37
+2021-06-28T16:37:15.767398+00:00 app[web.1]: buying short
+2021-06-28T16:37:16.360049+00:00 app[web.1]: (node:21) UnhandledPromiseRejectionWarning: BadRequest: bybit {"ret_code":10001,"ret_msg":"Param validation for 'qty' failed on the 'required' tag","ext_code":"","ext_info":"","result":null,"time_now":"1624898236.260170","rate_limit_status":99,"rate_limit_reset_ms":1624898236258,"rate_limit":100}
+2021-06-28T16:37:16.360068+00:00 app[web.1]: at bybit.throwExactlyMatchedException (/app/node_modules/ccxt/js/base/Exchange.js:538:19)
+2021-06-28T16:37:16.360069+00:00 app[web.1]: at bybit.handleErrors (/app/node_modules/ccxt/js/bybit.js:2395:18)
+2021-06-28T16:37:16.360069+00:00 app[web.1]: at /app/node_modules/ccxt/js/base/Exchange.js:600:18
+2021-06-28T16:37:16.360070+00:00 app[web.1]: at processTicksAndRejections (internal/process/task_queues.js:95:5)
+2021-06-28T16:37:16.360070+00:00 app[web.1]: at async timeout (/app/node_modules/ccxt/js/base/functions/time.js:195:24)
+2021-06-28T16:37:16.360070+00:00 app[web.1]: at async bybit.createOrder (/app/node_modules/ccxt/js/bybit.js:1407:26)
+2021-06-28T16:37:16.360071+00:00 app[web.1]: (Use `node --trace-warnings ...` to show where the warning was created)
+2021-06-28T16:37:16.360224+00:00 app[web.1]: (node:21) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
+2021-06-28T16:37:16.360339+00:00 app[web.1]: (node:21) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+2021-06-28T16:42:14.823989+00:00 app[web.1]: ticking... 28-06-2021 16:42
+2021-06-28T16:47:14.851916+00:00 app[web.1]: ticking... 28-06-2021 16:47
+2021-06-28T16:47:15.598181+00:00 app[web.1]: buying short
+2021-06-28T16:47:16.218709+00:00 app[web.1]: (node:21) UnhandledPromiseRejectionWarning: BadRequest: bybit {"ret_code":10001,"ret_msg":"Param validation for 'qty' failed on the 'required' tag","ext_code":"","ext_info":"","result":null,"time_now":"1624898836.125626","rate_limit_status":99,"rate_limit_reset_ms":1624898836124,"rate_limit":100}
+2021-06-28T16:47:16.218717+00:00 app[web.1]: at bybit.throwExactlyMatchedException (/app/node_modules/ccxt/js/base/Exchange.js:538:19)
+2021-06-28T16:47:16.218718+00:00 app[web.1]: at bybit.handleErrors (/app/node_modules/ccxt/js/bybit.js:2395:18)
+2021-06-28T16:47:16.218719+00:00 app[web.1]: at /app/node_modules/ccxt/js/base/Exchange.js:600:18
+2021-06-28T16:47:16.218719+00:00 app[web.1]: at processTicksAndRejections (internal/process/task_queues.js:95:5)
+2021-06-28T16:47:16.218720+00:00 app[web.1]: at async timeout (/app/node_modules/ccxt/js/base/functions/time.js:195:24)
+2021-06-28T16:47:16.218720+00:00 app[web.1]: at async bybit.createOrder (/app/node_modules/ccxt/js/bybit.js:1407:26)
+2021-06-28T16:47:16.218954+00:00 app[web.1]: (node:21) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 2)
+2021-06-28T16:52:14.915535+00:00 app[web.1]: ticking... 28-06-2021 16:52
+2021-06-28T16:57:15.010681+00:00 app[web.1]: ticking... 28-06-2021 16:57
+2021-06-28T16:58:09.000000+00:00 app[api]: Build started by user berkaltug96@gmail.com
+2021-06-28T16:59:20.887874+00:00 app[api]: Deploy bf773601 by user berkaltug96@gmail.com
+2021-06-28T16:59:20.887874+00:00 app[api]: Release v27 created by user berkaltug96@gmail.com
+2021-06-28T16:59:22.020034+00:00 heroku[web.1]: Restarting
+2021-06-28T16:59:22.025503+00:00 heroku[web.1]: State changed from up to starting
+2021-06-28T16:59:23.147845+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2021-06-28T16:59:23.272600+00:00 heroku[web.1]: Process exited with status 143
+2021-06-28T16:59:24.000000+00:00 app[api]: Build succeeded
+2021-06-28T16:59:28.169768+00:00 heroku[web.1]: Starting process with command `npm start`
+2021-06-28T16:59:31.039901+00:00 app[web.1]: 
+2021-06-28T16:59:31.039930+00:00 app[web.1]: > trade-bot@1.0.0 start /app
+2021-06-28T16:59:31.039930+00:00 app[web.1]: > node index.js
+2021-06-28T16:59:31.039930+00:00 app[web.1]: 
+2021-06-28T16:59:31.965563+00:00 app[web.1]: bot started on port 56346
+2021-06-28T16:59:32.393982+00:00 heroku[web.1]: State changed from starting to up
+2021-06-28T17:03:55.872079+00:00 heroku[router]: at=info method=GET path="/" host=berk-trade-bot.herokuapp.com request_id=bacfa16d-cc27-4667-ba80-89f5bcacb066 fwd="35.170.75.119" dyno=web.1 connect=0ms service=8ms status=404 bytes=360 protocol=http
+2021-06-28T17:04:31.972706+00:00 app[web.1]: ticking... 28-06-2021 17:04
+2021-06-28T17:09:32.006798+00:00 app[web.1]: ticking... 28-06-2021 17:09
+2021-06-28T17:14:32.084885+00:00 app[web.1]: ticking... 28-06-2021 17:14
+2021-06-28T17:19:32.182490+00:00 app[web.1]: ticking... 28-06-2021 17:19
+2021-06-28T17:24:32.206512+00:00 app[web.1]: ticking... 28-06-2021 17:24
+2021-06-28T17:29:32.267305+00:00 app[web.1]: ticking... 28-06-2021 17:29
+2021-06-28T17:32:22.142985+00:00 heroku[router]: at=info method=GET path="/" host=berk-trade-bot.herokuapp.com request_id=5d177d86-b278-4608-b9f6-c8707cf0f9f5 fwd="3.93.170.112" dyno=web.1 connect=0ms service=17ms status=404 bytes=360 protocol=http
+2021-06-28T17:34:32.362503+00:00 app[web.1]: ticking... 28-06-2021 17:34
+2021-06-28T17:39:32.369618+00:00 app[web.1]: ticking... 28-06-2021 17:39
+2021-06-28T17:44:32.410452+00:00 app[web.1]: ticking... 28-06-2021 17:44
+2021-06-28T17:49:32.490446+00:00 app[web.1]: ticking... 28-06-2021 17:49
+2021-06-28T17:54:32.594409+00:00 app[web.1]: ticking... 28-06-2021 17:54
+2021-06-28T17:59:32.619626+00:00 app[web.1]: ticking... 28-06-2021 17:59
+2021-06-28T18:04:20.488339+00:00 heroku[router]: at=info method=GET path="/" host=berk-trade-bot.herokuapp.com request_id=4f9616af-4cb5-47c1-8828-46baf4d229a0 fwd="3.227.18.11" dyno=web.1 connect=0ms service=4ms status=404 bytes=360 protocol=http
+2021-06-28T18:04:32.630656+00:00 app[web.1]: ticking... 28-06-2021 18:04
+2021-06-28T18:05:38.580751+00:00 heroku[web.1]: Idling
+2021-06-28T18:05:38.589268+00:00 heroku[web.1]: State changed from up to down
+2021-06-28T18:05:39.740065+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2021-06-28T18:05:39.901983+00:00 heroku[web.1]: Process exited with status 143

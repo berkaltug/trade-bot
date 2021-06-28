@@ -66,7 +66,9 @@ const rsiEmaRealTest=()=>{
     })
   },60000)
 }
-
+app.get('/',(req,res)=>{
+  res.send("bot is working...");
+})
 app.listen(port,()=>{
   console.log(`bot started on port ${port}`);
   testnet();
