@@ -8,7 +8,7 @@ const {
 } = require("./requests/nativeRequests");
 const { last } = require("./utils.js");
 const Big = require("big.js");
-Big.DP = 2;
+Big.DP = 4;
 exports.getCurrentBalance = () => {
   console.log("Your current balances...");
   binance.balance((error, balances) => {
@@ -121,7 +121,7 @@ exports.trade = async ({
           pair,
           "market",
           "buy",
-          amount.toFixed(4, Big.roundDown),
+          amount.toFixed(4),
           null,//price can be null on market
           params
         );
@@ -143,7 +143,7 @@ exports.trade = async ({
           pair,
           "market",
           "sell",
-          amount.toFixed(4, Big.roundDown),
+          amount.toFixed(4),
           null,//price can be null on market
           params
         );
