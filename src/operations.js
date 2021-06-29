@@ -107,7 +107,7 @@ exports.trade = async ({
         console.log("buying long");
         const moneyResponse = await bybit.fetchBalance();
         const money = new Big(moneyResponse.USDT.free);
-        const buyMoney = money.times(50).div(100);
+        const buyMoney = money.times(99).div(100);
         const lastPrice = new Big(await this.getLastPrice(pair));
         const amount = buyMoney.div(lastPrice);
         const ATR = new Big(last(atr));
@@ -129,7 +129,7 @@ exports.trade = async ({
         console.log("buying short");
         const moneyResponse = await bybit.fetchBalance();
         const money = new Big(moneyResponse.USDT.free);
-        const buyMoney = money.times(50).div(100);
+        const buyMoney = money.times(99).div(100);
         const lastPrice = new Big(await this.getLastPrice(pair));
         const amount = buyMoney.div(lastPrice);
         const ATR = new Big(last(atr));
