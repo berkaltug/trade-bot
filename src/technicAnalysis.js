@@ -1,13 +1,11 @@
 const {
   CrossDown,
   CrossUp,
-  StochasticRSI,
   MACD,
   EMA,
   ATR,
   RSI,
-  Stochastic,
-  MFI,
+  PSAR,
 } = require("technicalindicators");
 
 exports.engulfingCheck = (
@@ -34,13 +32,21 @@ exports.engulfingCheck = (
     return "none";
   }
 };
+exports.calculateSteepAngle=(emaArray)=>{
 
-exports.calculateIndicators = (result) => {
+}
+
+exports.calculateIndicators = (result,resultHighPeriod) => {
   const open = [],
     high = [],
     close = [],
     low = [],
-    volume=[];
+    volume=[],
+    openHighPeriod=[],
+    highHighPeriod=[],
+    closeHighPeriod=[],
+    lowHighPeriod=[];
+
   result &&
     result.length &&
     result.forEach((element) => {
@@ -50,6 +56,15 @@ exports.calculateIndicators = (result) => {
       close.push(element[4]);
       volume.push(element[5]);
     });
+
+  resultHighPeriod && 
+  result.length &&
+  result.forEach(element=>{
+    openHighPeriod.push(element[1]);
+    highHighPeriod.push(element[2]);
+    lowHighPeriod.push(element[3]);
+    closeHighPeriod.push(element[4]);
+  })
   const ema9 = EMA.calculate({
     period: 9,
     values: close,
@@ -62,13 +77,6 @@ exports.calculateIndicators = (result) => {
     period: 26,
     values: close,
   });
-  const mfi=MFI.calculate({
-    period:14,
-    high,
-    low,
-    close,
-    volume
-  });
   const macd=MACD.calculate({
     values:close,
     fastPeriod:12,
@@ -77,12 +85,20 @@ exports.calculateIndicators = (result) => {
     SimpleMAOscillator: false,
     SimpleMASignal    : false
   });
-
+  const psar=PSAR.calculate({
+    high,
+    low,
+    step:0.02,
+    max:0.2
+  });
   const rsi = RSI.calculate({
     period: 14,
     values: close,
   });
-
+  const ema200HighPeriod=EMA.calculate({
+    period:200,
+    values:closeHighPeriod
+  })
   const macdLine = macd.map((element) => element.MACD);
   const macdSignal = macd.map((element) => element.signal);
   const macdCrossUps = CrossUp.calculate({ lineA: macdLine, lineB: macdSignal });
@@ -102,7 +118,8 @@ exports.calculateIndicators = (result) => {
     macdCrossUps,
     macdCrossDowns,
     atr,
-    mfi
+    psar,
+    ema200HighPeriod
   };
 };
 

@@ -79,7 +79,8 @@ exports.trade = async ({
   macdCrossDowns,
   atr,
   rsi,
-  mfi
+  psar,
+  ema200HighPeriod
 }) => {
   try {
     const bybitPair = pair.replace("/", "");
@@ -103,12 +104,12 @@ exports.trade = async ({
           crossUp = false;
         }
       }
-      if (crossUp && last(rsi) > 50 && last(mfi) > 50) {
+      const lastPrice = new Big(await this.getLastPrice(pair));
+      if (crossUp && last(rsi) > 50 && last(psar) < lastPrice && lastPrice > last(ema200HighPeriod)) {
         console.log("buying long");
         const moneyResponse = await bybit.fetchBalance();
         const money = new Big(moneyResponse.USDT.free);
         const buyMoney = money.times(99).div(100);
-        const lastPrice = new Big(await this.getLastPrice(pair));
         const amount = buyMoney.div(lastPrice);
         const ATR = new Big(last(atr));
         const stop_loss = lastPrice.minus(ATR.times(2.2));
@@ -125,12 +126,11 @@ exports.trade = async ({
           null,//price can be null on market
           params
         );
-      } else if (crossDown && last(rsi) < 50 && last(mfi) < 50) {
+      } else if (crossDown && last(rsi) < 50 && last(psar) > lastPrice && lastPrice < last(ema200HighPeriod)) {
         console.log("buying short");
         const moneyResponse = await bybit.fetchBalance();
         const money = new Big(moneyResponse.USDT.free);
         const buyMoney = money.times(99).div(100);
-        const lastPrice = new Big(await this.getLastPrice(pair));
         const amount = buyMoney.div(lastPrice);
         const ATR = new Big(last(atr));
         const stop_loss = lastPrice.plus(ATR.times(2.2));
