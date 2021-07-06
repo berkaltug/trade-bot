@@ -8,7 +8,7 @@ const { default: Big } = require("big.js");
 
 
 const testnet = () => {
-  const timeInterval=1;
+  const timeInterval=5;
   setInterval(async () => {
     console.log("ticking... " + moment().format("DD-MM-YYYY HH:mm"))
     let result = await getBybitPrices(
