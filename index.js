@@ -12,7 +12,7 @@ const testnet = () => {
   setInterval(async () => {
     console.log("ticking... " + moment().format("DD-MM-YYYY HH:mm"))
     let result = await getBybitPrices(
-      "BTC/USDT",
+      "ETH/USDT",
       timeInterval+"m",
       moment().subtract(200*timeInterval, "minutes")
     );
