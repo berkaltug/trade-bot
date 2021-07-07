@@ -17,12 +17,17 @@ const testnet = () => {
       moment().subtract(200*timeInterval, "minutes")
     );
     let result30min = await getBybitPrices(
-      "BTC/USDT",
+      "ETH/USDT",
       "30m",
       moment().subtract(200*30, "minutes")
     );
-    let { ema9,ema14,ema26, macdCrossUps, macdCrossDowns, atr ,rsi,psar,ema200HighPeriod} =
-      calculateIndicators(result,result30min);
+    let result30min2nd = await getBybitPrices(
+      "ETH/USDT",
+      "30m",
+      moment().subtract(200*30*2, "minutes")
+    );
+    let { ema9,ema14,ema26, macdCrossUps, macdCrossDowns, atr ,rsi,psar,ema200HighPeriod,direction} =
+      calculateIndicators(result,result30min,result30min2nd);
     await trade({
       pair: "ETH/USDT",
       ema9,
@@ -33,7 +38,8 @@ const testnet = () => {
       rsi,
       atr,
       psar,
-      ema200HighPeriod
+      ema200HighPeriod,
+      direction
     });
   }, 60000*timeInterval);
 };

@@ -1,3 +1,4 @@
+const { forEach } = require("lodash");
 const {
   CrossDown,
   CrossUp,
@@ -36,7 +37,7 @@ exports.calculateSteepAngle=(emaArray)=>{
 
 }
 
-exports.calculateIndicators = (result,resultHighPeriod) => {
+exports.calculateIndicators = (result,resultHighPeriod,resultHighPeriod2nd) => {
   const open = [],
     high = [],
     close = [],
@@ -48,18 +49,25 @@ exports.calculateIndicators = (result,resultHighPeriod) => {
     lowHighPeriod=[];
 
   result &&
-    result.length &&
-    result.forEach((element) => {
+  result.length &&
+  result.forEach((element) => {
       open.push(element[1]);
       high.push(element[2]);
       low.push(element[3]);
       close.push(element[4]);
       volume.push(element[5]);
     });
-
+  resultHighPeriod2nd &&
+  resultHighPeriod2nd.length &&
+  resultHighPeriod2nd.forEach((element)=>{
+    openHighPeriod.push(element[1]);
+    highHighPeriod.push(element[2]);
+    lowHighPeriod.push(element[3]);
+    closeHighPeriod.push(element[4]);
+  })
   resultHighPeriod && 
-  result.length &&
-  result.forEach(element=>{
+  resultHighPeriod.length &&
+  resultHighPeriod.forEach(element=>{
     openHighPeriod.push(element[1]);
     highHighPeriod.push(element[2]);
     lowHighPeriod.push(element[3]);
@@ -109,6 +117,7 @@ exports.calculateIndicators = (result,resultHighPeriod) => {
     close,
     period: 14,
   });
+  const direction=trendDirection(ema200HighPeriod);
   return {
     ema9,
     ema14,
@@ -119,7 +128,8 @@ exports.calculateIndicators = (result,resultHighPeriod) => {
     macdCrossDowns,
     atr,
     psar,
-    ema200HighPeriod
+    ema200HighPeriod,
+    direction
   };
 };
 
@@ -157,3 +167,17 @@ exports.calculateIndicators2 = (result) => {
 
   return {ema14,crossUps,crossDowns,atr}
 };
+
+exports.trendDirection=(prices)=>{
+  let upward=0,downward=0;
+  for(let i=0;i<prices.length;i++){
+    if(i<prices.length-1){ //dont count last item
+      if(prices[i+1] > prices[i]){
+        upwards++;
+      }else{
+        downwards++;
+      }
+    }
+  }
+  return upward > downward ? "upward" : "downward" ;
+}
