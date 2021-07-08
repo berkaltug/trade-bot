@@ -173,9 +173,9 @@ trendDirection=(prices)=>{
   for(let i=0;i<prices.length;i++){
     if(i<prices.length-1){ //dont count last item
       if(prices[i+1] > prices[i]){
-        upwards++;
+        upward++;
       }else{
-        downwards++;
+        downward++;
       }
     }
   }
