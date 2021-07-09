@@ -51,5 +51,3 @@ app.listen(port,()=>{
   console.log(`bot started on port ${port}`);
   testnet();
 })
-
-
