@@ -41,7 +41,7 @@ const testnet = () => {
       ema200HighPeriod,
       direction
     });
-  }, 60000*timeInterval);
+  }, 60000*5);
 };
 
 app.get('/',(req,res)=>{

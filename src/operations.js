@@ -54,7 +54,6 @@ exports.getBybitPrices = async (pair, interval, since) => {
       recvWindow: 20000,
     }); //limit undefined gönder belirtmeye gerek yok
     const lastPrice = last(result)[4];
-    // result.pop(); // don't look current candle
     return result;
   } catch (e) {
     console.error(e);
@@ -95,7 +94,7 @@ exports.trade = async ({
       let crossUp, crossDown;
       const reverseCrossUps = macdCrossUps.reverse();
       const reverseCrossDowns = macdCrossDowns.reverse();
-      for (let i = 0; i < 5; i++) {
+      for (let i = 5; i > 0; i--) { // dizileri ters çevirince son beş ilk beş olur , fakat fiyat serileri de sağdan sola okunur 
         if (reverseCrossUps[i]) {
           crossUp = true;
           crossDown = false;
@@ -107,7 +106,6 @@ exports.trade = async ({
       }
       const lastPrice = new Big(await this.getLastPrice(pair));
       if (crossUp && last(psar) < lastPrice && direction=="upward") {
-        console.log("buying long");
         const moneyResponse = await bybit.fetchBalance();
         const money = new Big(moneyResponse.USDT.free);
         const buyMoney = money.times(99).div(100);
@@ -127,8 +125,9 @@ exports.trade = async ({
           null,//price can be null on market
           params
         );
+        console.log("buying long");
+
       } else if (crossDown && last(psar) > lastPrice && direction=="downward") {
-        console.log("buying short");
         const moneyResponse = await bybit.fetchBalance();
         const money = new Big(moneyResponse.USDT.free);
         const buyMoney = money.times(99).div(100);
@@ -148,6 +147,8 @@ exports.trade = async ({
           null,//price can be null on market
           params
         );
+        console.log("buying short");
+
       }
     }
   } catch (error) {
