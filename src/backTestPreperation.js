@@ -39,6 +39,7 @@ exports.fetchAndPrepareValues = async (
   dataset.low = [];
   dataset.close = [];
   dataset.open = [];
+
   ticksArray = [];
   let lastDateMs = startMs + dividerMs * limit;
   for (let i = 0; i < requestCount; i++) {
@@ -67,3 +68,57 @@ exports.fetchAndPrepareValues = async (
     });
   });
 };
+
+exports.fetcHighPeriod=async (
+  pair,
+  interval,
+  startFund,
+  startDate,
+  endDate = new Date(),
+  dataset
+)=>{
+  const startMs = startDate?.getTime();
+  const endMs = endDate?.getTime();
+  const dividerMs = intervalToMs(interval);
+  const candlesticks = (endMs - startMs) / dividerMs;
+  const limit = 1000;
+  console.log(`candlesticks ${candlesticks}`);
+  const requestCount = Math.ceil(candlesticks / limit);
+  console.log(
+    ` startDate ${startDate} endDate ${endDate} requestCount ${requestCount} `
+  );
+  console.log("fetching  High prices...");
+
+  dataset.highHigh = [];
+  dataset.highLow = [];
+  dataset.highClose = [];
+  dataset.highOpen = [];
+
+  ticksArray = [];
+  let lastDateMs = startMs + dividerMs * limit;
+  for (let i = 0; i < requestCount; i++) {
+    try {
+      if(new Date(lastDateMs)>new Date()){
+        lastDateMs=endDate.getTime();
+      }
+      let ticks = await getCoinPrices({
+        pair,
+        interval,
+        limit,
+        endDate: lastDateMs,
+      });
+      ticksArray.push(ticks);
+    } catch (error) {
+      console.error(error);
+    }
+    lastDateMs += dividerMs * limit;
+  }
+  _.forEach(ticksArray, (ticks, index) => {
+    _.forEach(ticks, (value, index) => {
+      dataset.highOpen.push(new Big(value[1]));
+      dataset.highHigh.push(new Big(value[2]));
+      dataset.highLow.push(new Big(value[3]));
+      dataset.highClose.push(new Big(value[4]));
+    });
+  });
+}

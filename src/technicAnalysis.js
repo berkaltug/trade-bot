@@ -168,9 +168,9 @@ exports.calculateIndicators2 = (result) => {
   return {ema14,crossUps,crossDowns,atr}
 };
 
-trendDirection=(prices)=>{
+const trendDirection=(prices)=>{
   let upward=0,downward=0;
-  for(let i=199;i<prices.length;i++){
+  for(let i=0;i<prices.length;i++){
     if(i<prices.length-1){ //dont count last item
       if(prices[i+1] > prices[i]){
         upward++;
@@ -181,3 +181,5 @@ trendDirection=(prices)=>{
   }
   return upward > downward ? "upward" : "downward" ;
 }
+
+exports.trendDirection=trendDirection;

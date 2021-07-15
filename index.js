@@ -8,7 +8,7 @@ const { default: Big } = require("big.js");
 
 
 const testnet = () => {
-  const timeInterval=15,higherReferencePeriod=30;
+  const timeInterval=1,higherReferencePeriod=15;
   setInterval(async () => {
     console.log("ticking... " + moment().format("DD-MM-YYYY HH:mm"))
     let result = await getBybitPrices(
@@ -41,7 +41,7 @@ const testnet = () => {
       ema200HighPeriod,
       direction
     });
-  }, 60000*5);
+  }, 60000*timeInterval);
 };
 
 app.get('/',(req,res)=>{

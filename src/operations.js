@@ -119,10 +119,10 @@ exports.trade = async ({
         };
         bybit.createOrder(
           pair,
-          "market",
+          "limit",
           "buy",
           amount.toFixed(4),
-          null,//price can be null on market
+          lastPrice.toFixed(4),
           params
         );
         console.log("buying long");
@@ -141,10 +141,10 @@ exports.trade = async ({
         };
         bybit.createOrder(
           pair,
-          "market",
+          "limit",
           "sell",
           amount.toFixed(4),
-          null,//price can be null on market
+          lastPrice.toFixed(4),
           params
         );
         console.log("buying short");

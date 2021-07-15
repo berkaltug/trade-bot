@@ -67,9 +67,6 @@ exports.Stoch3EmaAtr = async ({
       if (ema8[i] > ema14[i] && ema14[i] > ema50[i]) {
         if (
           (stochCrossUps[i - 1] || stochCrossUps[i]) 
-          &&
-          stochK[i] >50 &&
-          stochD[i] >50
         ) {
           buyLong(dataset, i);
           dataset.takeProfit = dataset.close[i - 1].plus(
@@ -82,9 +79,6 @@ exports.Stoch3EmaAtr = async ({
       } else if (ema8[i] < ema14[i] && ema14[i] < ema50[i]) {
         if (
           (stochCrossDowns[i - 1] || stochCrossDowns[i]) 
-          &&
-          stochK[i] <50 &&
-          stochD[i] <50
         ){
           buyShort(dataset, i);
           dataset.takeProfit = dataset.close[i - 1].minus(

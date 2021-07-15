@@ -6,7 +6,7 @@ exports.sellOperation = (dataset, i) => {
     if (dataset.high[i] >= dataset.takeProfit) {
       let amount = dataset.takeProfit.times(dataset.coinAmount);
       //komisyon kesimi
-      let withFee = amount.plus(amount.div(100000).times(25));
+      let withFee = amount.plus(amount.div(100000).times(75));
       dataset.finalFund = dataset.finalFund.plus(withFee);
       dataset.coinAmount = 0;
       dataset.successLongOrder++;
@@ -14,7 +14,7 @@ exports.sellOperation = (dataset, i) => {
     } else if (dataset.low[i] <= dataset.stopLoss) {
       let amount = dataset.stopLoss.times(dataset.coinAmount);
       //komisyon kesimi
-      let withFee = amount.plus(amount.div(100000).times(25));
+      let withFee = amount.plus(amount.div(100000).times(75));
       dataset.finalFund = dataset.finalFund.plus(withFee);
       dataset.coinAmount = 0;
       dataset.failedLongOrder++;
@@ -25,7 +25,7 @@ exports.sellOperation = (dataset, i) => {
     if (dataset.low[i] <= dataset.takeProfit) {
       let amount = dataset.takeProfit.times(dataset.coinAmount);
       //komisyon kesimi
-      let withFee = amount.minus(amount.div(100000).times(25));
+      let withFee = amount.minus(amount.div(100000).times(75));
       dataset.finalFund = dataset.shortHelper.plus(
         dataset.shortHelper.minus(withFee)
       );
@@ -35,7 +35,7 @@ exports.sellOperation = (dataset, i) => {
     } else if (dataset.high[i] >= dataset.stopLoss) {
       let amount = dataset.stopLoss.times(dataset.coinAmount);
       //komisyon kesimi
-      let withFee = amount.minus(amount.div(100000).times(25));
+      let withFee = amount.minus(amount.div(100000).times(75));
       dataset.finalFund = dataset.shortHelper.plus(
         dataset.shortHelper.minus(withFee)
       );
