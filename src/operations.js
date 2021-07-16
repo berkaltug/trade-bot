@@ -80,7 +80,9 @@ exports.trade = async ({
   rsi,
   psar,
   ema200HighPeriod,
-  direction
+  direction,
+  slMultiplier,
+  tpMultiplier
 }) => {
   try {
     const bybitPair = pair.replace("/", "");
@@ -111,8 +113,8 @@ exports.trade = async ({
         const buyMoney = money.times(99).div(100);
         const amount = buyMoney.div(lastPrice);
         const ATR = new Big(last(atr));
-        const stop_loss = lastPrice.minus(ATR.times(2.2));
-        const take_profit = lastPrice.plus(ATR.times(2));
+        const stop_loss = lastPrice.minus(ATR.times(slMultiplier));
+        const take_profit = lastPrice.plus(ATR.times(tpMultiplier));
         const params = {
           stop_loss: stop_loss.toFixed(2),
           take_profit: take_profit.toFixed(2),
@@ -133,8 +135,8 @@ exports.trade = async ({
         const buyMoney = money.times(99).div(100);
         const amount = buyMoney.div(lastPrice);
         const ATR = new Big(last(atr));
-        const stop_loss = lastPrice.plus(ATR.times(2.2));
-        const take_profit = lastPrice.minus(ATR.times(2));
+        const stop_loss = lastPrice.plus(ATR.times(slMultiplier));
+        const take_profit = lastPrice.minus(ATR.times(tpMultiplier));
         const params = {
           stop_loss: stop_loss.toFixed(2),
           take_profit: take_profit.toFixed(2),

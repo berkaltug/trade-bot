@@ -39,7 +39,9 @@ const testnet = () => {
       atr,
       psar,
       ema200HighPeriod,
-      direction
+      direction,
+      slMultiplier:3,
+      tpMultiplier:2.8
     });
   }, 60000*timeInterval);
 };
