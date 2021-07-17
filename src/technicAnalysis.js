@@ -174,7 +174,7 @@ const trendDirection=(prices)=>{
     if(i<prices.length-1){ //dont count last item
       if(prices[i+1] > prices[i]){
         upward++;
-      }else{
+      }else if(prices[i+1] < prices[i]){
         downward++;
       }
     }
@@ -183,3 +183,4 @@ const trendDirection=(prices)=>{
 }
 
 exports.trendDirection=trendDirection;
+

@@ -70,13 +70,13 @@ test4=async()=>{
 test5=async ()=>{
   await parSarMacdEma({
     pair:"ETHUSDT",
-    interval:"5m",
-    highInterval:"15m",
+    interval:"1m",
+    highInterval:"5m",
     startFund:new Big(200),
     startDate:new Date("2021-01-01T00:00:00"),
-    endDate:new Date("2021-02-01T24:00:00"),
+    endDate:new Date("2021-05-01T00:00:00"),
     tpMultiplier:2,
-    slMultiplier:2.2
+    slMultiplier:1.8
   })
 }
 test5();

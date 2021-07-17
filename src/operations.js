@@ -29,9 +29,9 @@ exports.getUSDTPairs = async () => {
   return usdtPairs;
 };
 exports.getCoinPrices = ({ pair, interval, limit, endDate }) => {
-  // setTimeout(() => {
+  setTimeout(() => {
 
-  // }, 50);
+  }, 250);
   return new Promise((resolve, reject) => {
     binance.candlesticks(
       pair,

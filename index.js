@@ -8,7 +8,7 @@ const { default: Big } = require("big.js");
 
 
 const testnet = () => {
-  const timeInterval=1,higherReferencePeriod=15;
+  const timeInterval=1,higherReferencePeriod=5;
   setInterval(async () => {
     console.log("ticking... " + moment().format("DD-MM-YYYY HH:mm"))
     let result = await getBybitPrices(
@@ -19,12 +19,12 @@ const testnet = () => {
     let result30min = await getBybitPrices(
       "ETH/USDT",
       higherReferencePeriod + "m",
-      moment().subtract(200*30, "minutes")
+      moment().subtract(200*higherReferencePeriod, "minutes")
     );
     let result30min2nd = await getBybitPrices(
       "ETH/USDT",
       higherReferencePeriod + "m",
-      moment().subtract(200*30*2, "minutes")
+      moment().subtract(200*higherReferencePeriod*2, "minutes")
     );
     let { ema9,ema14,ema26, macdCrossUps, macdCrossDowns, atr ,rsi,psar,ema200HighPeriod,direction} =
       calculateIndicators(result,result30min,result30min2nd);
@@ -40,8 +40,8 @@ const testnet = () => {
       psar,
       ema200HighPeriod,
       direction,
-      slMultiplier:3,
-      tpMultiplier:2.8
+      slMultiplier:1.4,
+      tpMultiplier:1.6
     });
   }, 60000*timeInterval);
 };

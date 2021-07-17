@@ -14,6 +14,7 @@ const {
   RSI,
   ATR,
 } = require("technicalindicators");
+const { intervalToMinute, fillArrayRepating } = require("./utils");
 
 exports.parSarMacdEma = async ({
   pair,
@@ -34,15 +35,15 @@ exports.parSarMacdEma = async ({
     endDate,
     dataset
   );
-  // await fetcHighPeriod(
-  //   pair,
-  //   highInterval,
-  //   startFund,
-  //   startDate,
-  //   endDate,
-  //   dataset
-  // );
-
+  await fetcHighPeriod(
+    pair,
+    highInterval,
+    startFund,
+    startDate,
+    endDate,
+    dataset
+  );
+  
   const macd = MACD.calculate({
     values: dataset.close.map((x) => x.toNumber()),
     fastPeriod: 12,
@@ -78,11 +79,21 @@ exports.parSarMacdEma = async ({
     close: dataset.close.map((x) => x.toString()),
     period: 14,
   });
+  let ema200HighPeriod=EMA.calculate({
+    values:dataset.highClose.map(x=>x.toNumber()),
+    period:200
+  });
+  
   atr = atr.map((x) => new Big(x));
+  const repeatAmount=intervalToMinute(highInterval)/intervalToMinute(interval);
+  const repeatedEma200= fillArrayRepating(ema200HighPeriod,repeatAmount);
+  
+
   let crossDown, crossUp, crossIdx;
   let sliceStart = 0;
   let sliceEnd = 200;
-  for (let i = 26; i < dataset.high.length; i++) {
+  for (let i = 200*repeatAmount; i < dataset.high.length; i++) {
+    const direction=trendDirection(repeatedEma200.slice(sliceStart,sliceEnd));
     if (dataset.openPositions === 0 && dataset.finalFund > 0) {
       if (macdCrossUps[i]) {
         crossUp = true;
@@ -94,9 +105,10 @@ exports.parSarMacdEma = async ({
         crossDown = true;
         crossIdx = i;
       }
+
       if (5 > i - crossIdx) {
         
-        if (crossUp && psar[i] < dataset.open[i] ) {
+        if (crossUp && psar[i] < dataset.open[i] && direction=="upward" ) {
           buyLong(dataset, i);
           dataset.stopLoss = dataset.close[i - 1].minus(
             new Big(atr[i]).times(slMultiplier)
@@ -105,7 +117,7 @@ exports.parSarMacdEma = async ({
             new Big(atr[i]).times(tpMultiplier)
           );
         }
-        if (crossDown && psar[i] > dataset.open[i] ) {
+        if (crossDown && psar[i] > dataset.open[i] && direction=="downward" ) {
           buyShort(dataset, i);
           dataset.stopLoss = dataset.close[i - 1].plus(
             new Big(atr[i]).times(slMultiplier)
@@ -150,3 +162,4 @@ exports.parSarMacdEma = async ({
               percentage ${percentage}
               `);
 };
+
