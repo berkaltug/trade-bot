@@ -40,8 +40,8 @@ const testnet = () => {
       psar,
       ema200HighPeriod,
       direction,
-      slMultiplier:1.4,
-      tpMultiplier:1.6
+      slMultiplier:2,
+      tpMultiplier:4
     });
   }, 60000*timeInterval);
 };

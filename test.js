@@ -73,10 +73,10 @@ test5=async ()=>{
     interval:"1m",
     highInterval:"5m",
     startFund:new Big(200),
-    startDate:new Date("2021-01-01T00:00:00"),
-    endDate:new Date("2021-05-01T00:00:00"),
-    tpMultiplier:2,
-    slMultiplier:1.8
+    startDate:new Date("2021-05-15T00:00:00"),
+    endDate:new Date("2021-06-25T00:00:00"),
+    tpMultiplier:1.6,
+    slMultiplier:1.4
   })
 }
 test5();
