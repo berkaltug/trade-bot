@@ -11,7 +11,14 @@ const talib = require("talib");
 const tulind = require("tulind");
 const Big = require("big.js");
 const { fetchAndPrepareValues } = require("./backTestPreperation");
-const { buyLong, buyShort, sellOperation, SellOperationNoCommission, buyLongNoCommission, buyShortNoCommission } = require("./buySellOperations");
+const {
+  buyLong,
+  buyShort,
+  sellOperation,
+  SellOperationNoCommission,
+  buyLongNoCommission,
+  buyShortNoCommission,
+} = require("./buySellOperations");
 
 exports.Stoch3EmaAtr = async ({
   pair,
@@ -66,7 +73,9 @@ exports.Stoch3EmaAtr = async ({
     if (dataset.openPositions === 0 && dataset.finalFund > 0) {
       if (ema8[i] > ema14[i] && ema14[i] > ema50[i]) {
         if (
-          (stochCrossUps[i - 1] || stochCrossUps[i]) 
+          (stochCrossUps[i - 2] ||stochCrossUps[i - 1] || stochCrossUps[i]) &&
+          stochK[i] > 50 &&
+          stochD[i] > 50
         ) {
           buyLong(dataset, i);
           dataset.takeProfit = dataset.close[i - 1].plus(
@@ -78,8 +87,10 @@ exports.Stoch3EmaAtr = async ({
         }
       } else if (ema8[i] < ema14[i] && ema14[i] < ema50[i]) {
         if (
-          (stochCrossDowns[i - 1] || stochCrossDowns[i]) 
-        ){
+          (stochCrossDowns[i - 2] ||stochCrossDowns[i - 1] || stochCrossDowns[i]) &&
+          stochK[i] < 50 &&
+          stochD[i] < 50
+        ) {
           buyShort(dataset, i);
           dataset.takeProfit = dataset.close[i - 1].minus(
             atr[i].times(tpMultiplier)
@@ -88,7 +99,6 @@ exports.Stoch3EmaAtr = async ({
             atr[i].times(slMultiplier)
           );
         }
-          
       }
     }
     if (dataset.openPositions === 1) {

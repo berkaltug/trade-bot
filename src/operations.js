@@ -71,16 +71,14 @@ exports.getLastPrice = async (pair) => {
 
 exports.trade = async ({
   pair,
-  ema9,
+  ema8,
   ema14,
-  ema26,
-  macdCrossUps,
-  macdCrossDowns,
+  ema50,
+  stochK,
+  stochD,
+  stochCrossUps,
+  stochCrossDowns,
   atr,
-  rsi,
-  psar,
-  ema200HighPeriod,
-  direction,
   slMultiplier,
   tpMultiplier
 }) => {
@@ -94,20 +92,26 @@ exports.trade = async ({
         await cancelAllOrders(bybitPair);
       }
       let crossUp, crossDown;
-      const reverseCrossUps = macdCrossUps.reverse();
-      const reverseCrossDowns = macdCrossDowns.reverse();
-      for (let i = 5; i > 0; i--) { // dizileri ters çevirince son beş ilk beş olur , fakat fiyat serileri de sağdan sola okunur 
-        if (reverseCrossUps[i]) {
-          crossUp = true;
-          crossDown = false;
+      const reverseStochK=stochK.reverse();
+      const reverseStochD=stochD.reverse();
+      const reverseCrossUps = stochCrossUps.reverse();
+      const reverseCrossDowns = stochCrossDowns.reverse();
+      for (let i = 2; i >= 0; i--) { // dizileri ters çevirince son üç ilk üç olur , fakat fiyat serileri de sağdan sola okunur 
+        if(reverseStochK[i] > 50 && reverseStochD[i] > 50){
+          if (reverseCrossUps[i]) {
+            crossUp = true;
+            crossDown = false;
+          }
         }
-        if (reverseCrossDowns[i]) {
-          crossDown = true;
-          crossUp = false;
+        if(reverseStochK[i] < 50 && reverseStochD[i] < 50){
+          if (reverseCrossDowns[i]) {
+            crossDown = true;
+            crossUp = false;
+          }
         }
       }
       const lastPrice = new Big(await this.getLastPrice(pair));
-      if (crossUp && last(psar) < lastPrice && direction=="upward") {
+      if (crossUp && (last(ema8) > last(ema14)) && (last(ema14) > last(ema50))) {
         const moneyResponse = await bybit.fetchBalance();
         const money = new Big(moneyResponse.USDT.free);
         const buyMoney = money.times(99).div(100);
@@ -129,7 +133,7 @@ exports.trade = async ({
         );
         console.log("buying long");
 
-      } else if (crossDown && last(psar) > lastPrice && direction=="downward") {
+      } else if (crossDown && (last(ema8) < last(ema14)) && (last(ema14) < last(ema50))) {
         const moneyResponse = await bybit.fetchBalance();
         const money = new Big(moneyResponse.USDT.free);
         const buyMoney = money.times(99).div(100);

@@ -43,11 +43,11 @@ test3=async()=>{
   let now1=Date.now()
   await Stoch3EmaAtr({
     pair: "ETHUSDT",
-      interval: "1h",
+      interval: "5m",
       startFund:new Big(200),
-      startDate: new Date("2020-05-19T00:00:00"),
-      endDate: new Date("2020-06-19T12:06:00"),
-      tpMultiplier:2,
+      startDate: new Date("2020-01-01T00:00:00"),
+      endDate: new Date("2020-03-01T24:00:00"),
+      tpMultiplier:2.2,
       slMultiplier:1.7
   });
   let now2=Date.now()
@@ -60,8 +60,8 @@ test4=async()=>{
     pair:"ETHUSDT",
     interval:"1m",
     startFund:new Big(200),
-    startDate:new Date("2021-06-01T00:00:00"),
-    endDate:new Date("2021-06-30T24:00:00"),
+    startDate:new Date("2019-02-25T00:00:00"),
+    endDate:new Date("2019-03-25T24:00:00"),
     tpMultiplier:2,
     slMultiplier:2.2
   });
@@ -70,13 +70,13 @@ test4=async()=>{
 test5=async ()=>{
   await parSarMacdEma({
     pair:"ETHUSDT",
-    interval:"1m",
-    highInterval:"5m",
+    interval:"5m",
+    highInterval:"15m",
     startFund:new Big(200),
-    startDate:new Date("2021-05-15T00:00:00"),
-    endDate:new Date("2021-06-25T00:00:00"),
-    tpMultiplier:1.6,
-    slMultiplier:1.4
+    startDate:new Date("2019-02-25T00:00:00"),
+    endDate:new Date("2019-03-25T24:00:00"),
+    tpMultiplier:4,
+    slMultiplier:2
   })
 }
-test5();
+test3();

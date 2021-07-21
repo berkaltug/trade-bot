@@ -26,20 +26,25 @@ const testnet = () => {
       higherReferencePeriod + "m",
       moment().subtract(200*higherReferencePeriod*2, "minutes")
     );
-    let { ema9,ema14,ema26, macdCrossUps, macdCrossDowns, atr ,rsi,psar,ema200HighPeriod,direction} =
+    let {  ema8,
+      ema14,
+      ema50,
+      stochK,
+      stochD,
+      stochCrossUps,
+      stochCrossDowns,
+      atr} =
       calculateIndicators(result,result30min,result30min2nd);
     await trade({
       pair: "ETH/USDT",
-      ema9,
+      ema8,
       ema14,
-      ema26,
-      macdCrossUps,
-      macdCrossDowns,
-      rsi,
+      ema50,
+      stochK,
+      stochD,
+      stochCrossUps,
+      stochCrossDowns,
       atr,
-      psar,
-      ema200HighPeriod,
-      direction,
       slMultiplier:2,
       tpMultiplier:4
     });

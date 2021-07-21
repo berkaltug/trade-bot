@@ -7,6 +7,7 @@ const {
   ATR,
   RSI,
   PSAR,
+  Stochastic,
 } = require("technicalindicators");
 
 exports.engulfingCheck = (
@@ -57,79 +58,69 @@ exports.calculateIndicators = (result,resultHighPeriod,resultHighPeriod2nd) => {
       close.push(element[4]);
       volume.push(element[5]);
     });
-  resultHighPeriod2nd &&
-  resultHighPeriod2nd.length &&
-  resultHighPeriod2nd.forEach((element)=>{
-    openHighPeriod.push(element[1]);
-    highHighPeriod.push(element[2]);
-    lowHighPeriod.push(element[3]);
-    closeHighPeriod.push(element[4]);
-  })
-  resultHighPeriod && 
-  resultHighPeriod.length &&
-  resultHighPeriod.forEach(element=>{
-    openHighPeriod.push(element[1]);
-    highHighPeriod.push(element[2]);
-    lowHighPeriod.push(element[3]);
-    closeHighPeriod.push(element[4]);
-  })
-  const ema9 = EMA.calculate({
-    period: 9,
+  // resultHighPeriod2nd &&
+  // resultHighPeriod2nd.length &&
+  // resultHighPeriod2nd.forEach((element)=>{
+  //   openHighPeriod.push(element[1]);
+  //   highHighPeriod.push(element[2]);
+  //   lowHighPeriod.push(element[3]);
+  //   closeHighPeriod.push(element[4]);
+  // })
+  // resultHighPeriod && 
+  // resultHighPeriod.length &&
+  // resultHighPeriod.forEach(element=>{
+  //   openHighPeriod.push(element[1]);
+  //   highHighPeriod.push(element[2]);
+  //   lowHighPeriod.push(element[3]);
+  //   closeHighPeriod.push(element[4]);
+  // })
+  const ema8 = EMA.calculate({
+    period: 8,
     values: close,
   });
   const ema14 = EMA.calculate({
     period: 14,
     values: close,
   });
-  const ema26 = EMA.calculate({
-    period: 26,
+  const ema50 = EMA.calculate({
+    period: 50,
     values: close,
   });
-  const macd=MACD.calculate({
-    values:close,
-    fastPeriod:12,
-    slowPeriod:26,
-    signalPeriod      : 9,
-    SimpleMAOscillator: false,
-    SimpleMASignal    : false
-  });
-  const psar=PSAR.calculate({
+  const stoch = Stochastic.calculate({
     high,
     low,
-    step:0.02,
-    max:0.2
-  });
-  const rsi = RSI.calculate({
+    close,
     period: 14,
-    values: close,
+    signalPeriod: 3
   });
-  const ema200HighPeriod=EMA.calculate({
-    period:200,
-    values:closeHighPeriod
-  })
-  const macdLine = macd.map((element) => element.MACD);
-  const macdSignal = macd.map((element) => element.signal);
-  const macdCrossUps = CrossUp.calculate({ lineA: macdLine, lineB: macdSignal });
-  const macdCrossDowns = CrossDown.calculate({ lineA: macdLine, lineB: macdSignal });
+  // const ema200HighPeriod=EMA.calculate({
+  //   period:200,
+  //   values:closeHighPeriod
+  // })
+  const stochK = stoch.map((value, index) => index > 1 && value.k);
+  const stochD = stoch.map((value, index) => index > 1 && value.d);
+  const stochCrossUps = CrossUp.calculate({ lineA: stochK, lineB: stochD });
+  const stochCrossDowns = CrossDown.calculate({ lineA: stochK, lineB: stochD });
+
+
   const atr = ATR.calculate({
     high,
     low,
     close,
     period: 14,
   });
-  const direction=trendDirection(ema200HighPeriod);
+  // const direction=trendDirection(ema200HighPeriod);
   return {
-    ema9,
+    ema8,
     ema14,
-    ema26,
-    rsi,
-    macd,
-    macdCrossUps,
-    macdCrossDowns,
+    ema50,
+    stochK,
+    stochD,
+    stochCrossUps,
+    stochCrossDowns,
     atr,
-    psar,
-    ema200HighPeriod,
-    direction
+    // ema200HighPeriod,
+    // direction
   };
 };
 
