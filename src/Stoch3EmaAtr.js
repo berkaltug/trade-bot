@@ -10,7 +10,7 @@ const _ = require("lodash");
 const talib = require("talib");
 const tulind = require("tulind");
 const Big = require("big.js");
-const { fetchAndPrepareValues } = require("./backTestPreperation");
+const { fetchAndPrepareValues,fetcHighPeriod } = require("./backTestPreperation");
 const {
   buyLong,
   buyShort,
@@ -19,10 +19,14 @@ const {
   buyLongNoCommission,
   buyShortNoCommission,
 } = require("./buySellOperations");
+const { trendDirection } = require("./technicAnalysis");
+const { intervalToMinute, fillArrayRepating } = require("./utils");
+
 
 exports.Stoch3EmaAtr = async ({
   pair,
   interval,
+  highInterval,
   startFund,
   startDate,
   endDate = new Date(),
@@ -33,6 +37,14 @@ exports.Stoch3EmaAtr = async ({
   await fetchAndPrepareValues(
     pair,
     interval,
+    startFund,
+    startDate,
+    endDate,
+    dataset
+  );
+  await fetcHighPeriod(
+    pair,
+    highInterval,
     startFund,
     startDate,
     endDate,
@@ -64,14 +76,23 @@ exports.Stoch3EmaAtr = async ({
     close: dataset.close.map((x) => x.toNumber()),
     period: 14,
   });
+  let ema200HighPeriod=EMA.calculate({
+    values:dataset.highClose.map(x=>x.toNumber()),
+    period:200
+  });
   atr = atr.map((x) => new Big(x));
   const stochK = _.map(stoch, (value, index) => index > 1 && value.k);
   const stochD = _.map(stoch, (value, index) => index > 1 && value.d);
   const stochCrossUps = CrossUp.calculate({ lineA: stochK, lineB: stochD });
   const stochCrossDowns = CrossDown.calculate({ lineA: stochK, lineB: stochD });
-  for (let i = 49; i < ema50.length; i++) {
+  const repeatAmount=intervalToMinute(highInterval)/intervalToMinute(interval);
+  const repeatedEma200= fillArrayRepating(ema200HighPeriod,repeatAmount);
+  let sliceStart = 0;
+  let sliceEnd = 200;
+  for (let i = 200*repeatAmount; i < dataset.close.length; i++) {
+    const direction=trendDirection(repeatedEma200.slice(sliceStart,sliceEnd));
     if (dataset.openPositions === 0 && dataset.finalFund > 0) {
-      if (ema8[i] > ema14[i] && ema14[i] > ema50[i]) {
+      if (ema8[i] > ema14[i] && ema14[i] > ema50[i] ) {
         if (
           (stochCrossUps[i - 2] ||stochCrossUps[i - 1] || stochCrossUps[i]) &&
           stochK[i] > 50 &&
@@ -85,7 +106,7 @@ exports.Stoch3EmaAtr = async ({
             atr[i].times(slMultiplier)
           );
         }
-      } else if (ema8[i] < ema14[i] && ema14[i] < ema50[i]) {
+      } else if (ema8[i] < ema14[i] && ema14[i] < ema50[i] ) {
         if (
           (stochCrossDowns[i - 2] ||stochCrossDowns[i - 1] || stochCrossDowns[i]) &&
           stochK[i] < 50 &&
@@ -104,6 +125,9 @@ exports.Stoch3EmaAtr = async ({
     if (dataset.openPositions === 1) {
       sellOperation(dataset, i);
     }
+
+    sliceStart++;
+    sliceEnd++;
   }
 
   if (dataset.openPositions == 1) {
