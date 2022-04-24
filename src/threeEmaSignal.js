@@ -37,6 +37,7 @@ exports.threeEmaSignal = async () => {
         let closeValues = binancePrices.map(candle => candle[4])
         let date=moment().format("DD-MM-YYYY HH:mm:ss");
         console.log("working "+ date.toString());
+        console.log(chatIds);
         let ema10 = EMA.calculate({
             values: closeValues,
             period: 10
