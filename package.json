@@ -5,25 +5,25 @@
   "main": "index.js",
   "scripts": {
     "test": "node test.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev":"nodemon index.js"
   },
   "author": "Berk Altuğ",
   "license": "ISC",
   "dependencies": {
     "big.js": "^6.1.1",
-    "bignumber.js": "^9.0.1",
-    "ccxt": "^1.51.20",
+    "ccxt": "^1.80.54",
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "lodash": "^4.17.21",
-    "mathjs": "^9.3.2",
     "moment": "^2.29.1",
     "node-binance-api": "^0.12.5",
     "node-fetch": "^2.6.1",
+    "nodemon": "^2.0.15",
     "prompt-sync": "^4.2.0",
-    "talib": "^1.1.4",
     "technicalindicators": "^3.1.0",
+    "telegraf": "^4.7.0",
     "tulind": "^0.8.18"
   }
 }
