@@ -36,6 +36,7 @@ exports.threeEmaSignal = async () => {
         binancePrices = await ccxtBinance.fetchOHLCV('BTC/USDT', '1h');
         let closeValues = binancePrices.map(candle => candle[4])
         let date=moment().format("DD-MM-YYYY HH:mm:ss");
+        console.log("working "+ date.toString());
         let ema10 = EMA.calculate({
             values: closeValues,
             period: 10
