@@ -6,6 +6,9 @@ const { default: Big } = require("big.js");
 const {intervalToMs} = require('./src/utils');
 const {getBybitPrices,getCoinPrices} = require('./src/operations');
 const {threeEmaSignal} =require('./src/threeEmaSignal')
+const db = require("./src/models");
+db.sequelize.sync();
+
 app.get('/',(req,res)=>{
   res.send("bot is working...");
 })

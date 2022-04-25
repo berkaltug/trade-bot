@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node test.js",
     "start": "node index.js",
-    "dev":"nodemon index.js"
+    "dev": "nodemon index.js"
   },
   "author": "Berk Altuğ",
   "license": "ISC",
@@ -21,7 +21,10 @@
     "node-binance-api": "^0.12.5",
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.15",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
     "prompt-sync": "^4.2.0",
+    "sequelize": "^6.19.0",
     "technicalindicators": "^3.1.0",
     "telegraf": "^4.7.0",
     "tulind": "^0.8.18"
