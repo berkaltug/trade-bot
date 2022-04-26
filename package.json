@@ -11,6 +11,7 @@
   "author": "Berk Altuğ",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.0",
     "big.js": "^6.1.1",
     "ccxt": "^1.80.54",
     "crypto": "^1.0.1",
