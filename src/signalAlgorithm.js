@@ -1,33 +1,25 @@
 const { ccxtBinance } = require("./binance");
-const { EMA, CrossDown, CrossUp } = require("technicalindicators");
-const { last } = require("./utils");
-const {bot,sendMsg} = require("./telegramBot");
+const { EMA, CrossDown, CrossUp, PSAR } = require("technicalindicators");
+const { last, last2nd } = require("./utils");
+const { bot, sendMsg } = require("./telegramBot");
 const moment = require("moment");
 
+exports.signalAlgorithm = async () => {
 
-
-
-exports.threeEmaSignal = async () => {
-  // send since undefined cause 1000 candle is enough, limit=1000
-  let binancePrices = await ccxtBinance.fetchOHLCV(
-    "BTC/USDT",
-    "1h",
-    undefined,
-    1000
-  ); //binance support max 1000 candle
-  let crossUp10to20,
-    crossUp20to50,
-    crossDown10to20,
-    crossDown20to50,
-    goldenCrossUp,
-    goldenCrossDown;
-  let crossUp10to20Happened,
-    crossUp20to50Happened,
-    crossDown10to20Happened,
-    crossDown20to50Happened;
+  let crossUp10to20, crossDown10to20, goldenCrossUp, goldenCrossDown;
+  let crossUp10to20Happened, crossDown10to20Happened;
+  let lastPsar, currentPsar;
   console.log("bot started " + moment().format("DD-MM-YYYY HH:mm:ss"));
+
   setInterval(async () => {
-    binancePrices = await ccxtBinance.fetchOHLCV("BTC/USDT", "1h");
+  // send since undefined cause 1000 candle is enough, limit=1000
+  //binance support max 1000 candle
+    binancePrices = await ccxtBinance.fetchOHLCV(
+      "BTC/USDT",
+      "1h",
+      undefined,
+      1000
+    );
     let closeValues = binancePrices.map((candle) => candle[4]);
     let date = moment().format("DD-MM-YYYY HH:mm:ss");
     console.log("working " + date.toString());
@@ -51,7 +43,18 @@ exports.threeEmaSignal = async () => {
     crossUp10to20 = last(CrossUp.calculate({ lineA: ema10, lineB: ema20 }));
     crossUp20to50 = last(CrossUp.calculate({ lineA: ema20, lineB: ema50 }));
     crossDown10to20 = last(CrossDown.calculate({ lineA: ema10, lineB: ema20 }));
-    crossDown20to50 = last(CrossDown.calculate({ lineA: ema20, lineB: ema50 }));
+    let highValues = binancePrices.map((candle) => candle[2]);
+    let lowValues = binancePrices.map((candle) => candle[3]);
+    let psar = PSAR.calculate({
+      high: highValues,
+      low: lowValues,
+      step: 0.02,
+      max: 0.2,
+    });
+    lastPsar = last2nd(psar) < last2nd(closeValues) ? "below" : "above";
+    currentPsar = last(psar) < last(closeValues) ? "below" : "above";
+    console.log("last psar: " + lastPsar);
+    console.log("current psar: " + currentPsar);
     goldenCrossDown = last(
       CrossDown.calculate({ lineA: ema50, lineB: ema200 })
     );
@@ -60,27 +63,19 @@ exports.threeEmaSignal = async () => {
       crossUp10to20Happened = true;
       crossDown10to20Happened = false;
     }
-    if (crossUp20to50) {
-      crossUp20to50Happened = true;
-      crossDown20to50Happened = false;
-    }
     if (crossDown10to20) {
       crossUp10to20Happened = false;
       crossDown10to20Happened = true;
     }
-    if (crossDown20to50) {
-      crossUp20to50Happened = false;
-      crossDown20to50Happened = true;
-    }
-    if (crossUp10to20Happened && crossUp20to50Happened) {
+    if (crossUp10to20Happened) {
       const msg =
-        "BTC/USDT 1h (Binance) grafiğinde 10ema 20ema'yı ve 20ema 50ema'yı YUKARI yönlü kırdı. " +
+        "BTC/USDT 1h (Binance) grafiğinde 10ema 20ema'yı YUKARI yönlü kırdı. " +
         date.toString();
       sendMsg(msg);
     }
-    if (crossDown10to20Happened && crossDown20to50Happened) {
+    if (crossDown10to20Happened) {
       const msg =
-        "BTC/USDT 1h (Binance) grafiğinde 10ema 20ema'yı ve 20ema 50ema'yı AŞAĞI yönlü kırdı. " +
+        "BTC/USDT 1h (Binance) grafiğinde 10ema 20ema'yı AŞAĞI yönlü kırdı. " +
         date.toString();
       sendMsg(msg);
     }
@@ -95,6 +90,20 @@ exports.threeEmaSignal = async () => {
         "BTC/USDT 1h (Binance) grafiğinde AŞAĞI Yönlü golden cross gerçekleşti. " +
         date.toString();
       sendMsg(msg);
+    }
+    if (lastPsar !== currentPsar) {
+      if (lastPsar === "above" && currentPsar === "below") {
+        const msg =
+          "BTC/USDT 1h (Binance) grafiğinde PSAR değeri AŞAĞI geçti" +
+          date.toString();
+        sendMsg(msg);
+      }
+      if (lastPsar === "below" && currentPsar === "above") {
+        const msg =
+          "BTC/USDT 1h (Binance) grafiğinde PSAR değeri YUKARI geçti" +
+          date.toString();
+        sendMsg(msg);
+      }
     }
   }, 300000);
 };

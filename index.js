@@ -1,11 +1,9 @@
 const moment = require("moment");
+const dotenv = require('dotenv').config();
 const express = require('express');
 const app=express();
 const port=process.env.PORT || 3000;
-const { default: Big } = require("big.js");
-const {intervalToMs} = require('./src/utils');
-const {getBybitPrices,getCoinPrices} = require('./src/operations');
-const {threeEmaSignal} =require('./src/threeEmaSignal')
+const {signalAlgorithm} =require('./src/signalAlgorithm')
 const db = require("./src/models");
 const {pingInterval}=require('./src/sleepHandler');
 
@@ -16,7 +14,7 @@ app.get('/',(req,res)=>{
 })
 app.listen(port,()=>{
   console.log(`bot started on port ${port}`);
-  threeEmaSignal();
+  signalAlgorithm();
 })
 
 pingInterval()

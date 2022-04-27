@@ -42,6 +42,7 @@ exports.intervalToMs = (interval) => {
   };
   
 exports.last=arr=>arr[arr.length-1]
+exports.last2nd=arr=>arr[arr.length-2]
 
 exports.fillArrayRepating=(arr,amount)=>{
   let result=[];

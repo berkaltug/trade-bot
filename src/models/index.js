@@ -1,6 +1,4 @@
-const dbConfig = require("../db.config.js");
 const Sequelize = require("sequelize");
-
 //for heroku , configure later conditionally via an env variable
 const sequelize = new Sequelize(process.env.DATABASE_URL,{
     dialectOptions: {
@@ -12,7 +10,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL,{
 })
 
 //for localhost , configure later via env variables
-// const sequelize = new Sequelize(process.env.DATABASE_URL)
+// const sequelize = new Sequelize(process.env.DATABASE_URL,{dialect:"postgres"})
 
 const db = {};
 db.Sequelize = Sequelize;
