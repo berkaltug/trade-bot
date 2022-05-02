@@ -102,5 +102,5 @@ exports.signalAlgorithm = async () => {
         // sendMsg(msg);
       }
     }
-  }, 1000*60);
+  }, 1000*60*5);
 };
