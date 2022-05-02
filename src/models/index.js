@@ -1,17 +1,21 @@
 const Sequelize = require("sequelize");
-//for heroku , configure later conditionally via an env variable
-const sequelize = new Sequelize(process.env.DATABASE_URL,{
-    dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false
-        }
-     }
-})
+let sequelize;
+console.log(process.env.ENVIRONMENT);
+if (process.env.ENVIRONMENT==="heroku"){
+     sequelize = new Sequelize(process.env.DATABASE_URL,{
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+         }
+    })
+}
+if (process.env.ENVIRONMENT==="local"){
+     sequelize = new Sequelize(process.env.DATABASE_URL,{dialect:"postgres"})
 
-//for localhost , configure later via env variables
-// const sequelize = new Sequelize(process.env.DATABASE_URL,{dialect:"postgres"})
-
+}
+ 
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;

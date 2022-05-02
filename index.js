@@ -17,4 +17,4 @@ app.listen(port,()=>{
   signalAlgorithm();
 })
 
-pingInterval()
+// pingInterval()
