@@ -63,28 +63,28 @@ exports.signalAlgorithm = async () => {
         "BTC/USDT 1h (Binance) grafiğinde 10ema 20ema'yı YUKARI yönlü kırdı. " +
         date.toString();
         console.log(msg);
-      // sendMsg(msg);
+      sendMsg(msg);
     }
     if (crossDown10to20) {
       const msg =
         "BTC/USDT 1h (Binance) grafiğinde 10ema 20ema'yı AŞAĞI yönlü kırdı. " +
         date.toString();
         console.log(msg);
-      // sendMsg(msg);
+      sendMsg(msg);
     }
     if (goldenCrossUp) {
       const msg =
         "BTC/USDT 1h (Binance) grafiğinde YUKARI Yönlü golden cross gerçekleşti. " +
         date.toString();
         console.log(msg);
-      // sendMsg(msg);
+      sendMsg(msg);
     }
     if (goldenCrossDown) {
       const msg =
         "BTC/USDT 1h (Binance) grafiğinde AŞAĞI Yönlü golden cross gerçekleşti. " +
         date.toString();
         console.log(msg);
-      // sendMsg(msg);
+      sendMsg(msg);
     }
     if (lastPsar !== currentPsar) {
       if (lastPsar === "above" && currentPsar === "below") {
@@ -92,14 +92,14 @@ exports.signalAlgorithm = async () => {
           "BTC/USDT 1h (Binance) grafiğinde PSAR değeri AŞAĞI geçti" +
           date.toString();
           console.log(msg);
-        // sendMsg(msg);
+        sendMsg(msg);
       }
       if (lastPsar === "below" && currentPsar === "above") {
         const msg =
           "BTC/USDT 1h (Binance) grafiğinde PSAR değeri YUKARI geçti" +
           date.toString();
           console.log(msg);
-        // sendMsg(msg);
+        sendMsg(msg);
       }
     }
   }, 1000*60*5);
