@@ -34,130 +34,22 @@ exports.engulfingCheck = (
     return "none";
   }
 };
-exports.calculateSteepAngle=(emaArray)=>{
 
+const CROSS_DOWN="cross_down"
+const CROSS_UP="cross_up"
+exports.CROSS_DOWN=CROSS_DOWN
+exports.CROSS_UP=CROSS_UP
+exports.cross=(fastEmaPrevious , fastEmaCurrent , slowEmaPrevious , slowEmaCurrent )=>{
+  if(fastEmaPrevious<slowEmaPrevious && fastEmaCurrent > slowEmaCurrent) {
+    return CROSS_UP;
+  }
+  else if(fastEmaPrevious>slowEmaPrevious && fastEmaCurrent < slowEmaCurrent){
+    return CROSS_DOWN;
+  }
+  else{
+    return null;
+  }
 }
-
-exports.calculateIndicators = (result,resultHighPeriod,resultHighPeriod2nd) => {
-  const open = [],
-    high = [],
-    close = [],
-    low = [],
-    volume=[],
-    openHighPeriod=[],
-    highHighPeriod=[],
-    closeHighPeriod=[],
-    lowHighPeriod=[];
-
-  result &&
-  result.length &&
-  result.forEach((element) => {
-      open.push(element[1]);
-      high.push(element[2]);
-      low.push(element[3]);
-      close.push(element[4]);
-      volume.push(element[5]);
-    });
-  // resultHighPeriod2nd &&
-  // resultHighPeriod2nd.length &&
-  // resultHighPeriod2nd.forEach((element)=>{
-  //   openHighPeriod.push(element[1]);
-  //   highHighPeriod.push(element[2]);
-  //   lowHighPeriod.push(element[3]);
-  //   closeHighPeriod.push(element[4]);
-  // })
-  // resultHighPeriod && 
-  // resultHighPeriod.length &&
-  // resultHighPeriod.forEach(element=>{
-  //   openHighPeriod.push(element[1]);
-  //   highHighPeriod.push(element[2]);
-  //   lowHighPeriod.push(element[3]);
-  //   closeHighPeriod.push(element[4]);
-  // })
-  const ema8 = EMA.calculate({
-    period: 8,
-    values: close,
-  });
-  const ema14 = EMA.calculate({
-    period: 14,
-    values: close,
-  });
-  const ema50 = EMA.calculate({
-    period: 50,
-    values: close,
-  });
-  const stoch = Stochastic.calculate({
-    high,
-    low,
-    close,
-    period: 14,
-    signalPeriod: 3
-  });
-  // const ema200HighPeriod=EMA.calculate({
-  //   period:200,
-  //   values:closeHighPeriod
-  // })
-  const stochK = stoch.map((value, index) => index > 1 && value.k);
-  const stochD = stoch.map((value, index) => index > 1 && value.d);
-  const stochCrossUps = CrossUp.calculate({ lineA: stochK, lineB: stochD });
-  const stochCrossDowns = CrossDown.calculate({ lineA: stochK, lineB: stochD });
-
-
-  const atr = ATR.calculate({
-    high,
-    low,
-    close,
-    period: 14,
-  });
-  // const direction=trendDirection(ema200HighPeriod);
-  return {
-    ema8,
-    ema14,
-    ema50,
-    stochK,
-    stochD,
-    stochCrossUps,
-    stochCrossDowns,
-    atr,
-    // ema200HighPeriod,
-    // direction
-  };
-};
-
-exports.calculateIndicators2 = (result) => {
-  const open = [],
-    high = [],
-    close = [],
-    low = [];
-  result &&
-    result.length &&
-    result.forEach((element) => {
-      open.push(element[1]);
-      high.push(element[2]);
-      low.push(element[3]);
-      close.push(element[4]);
-    });
-  const ema14 = EMA.calculate({
-    period: 14,
-    values: close,
-  });
-  const rsi = RSI.calculate({
-    period: 14,
-    values: close,
-  });
-  const atr = ATR.calculate({
-    high,
-    low,
-    close,
-    period: 14,
-  });
-  const upperBand = rsi.map((x) => 70);
-  const lowerBand = rsi.map((x) => 30);
-  const crossDowns = CrossDown.calculate({ lineA: rsi, lineB: upperBand });
-  const crossUps = CrossUp.calculate({ lineA: rsi, lineB: lowerBand });
-
-  return {ema14,crossUps,crossDowns,atr}
-};
 
 const trendDirection=(prices)=>{
   let upward=0,downward=0;
